@@ -1,4 +1,4 @@
-module PeopleHrResponseParsingTests
+module PeopleHrHolidayResponseParsingTests
 
 
 open Expecto
@@ -14,7 +14,7 @@ let private expectAbsences (expected:Absence list) message result =
 
 [<Tests>]
 let tests =
-    testList "People HR API Response parsing" [
+    testList "People HR API Holiday Response parsing" [
 
         test "Parses 1 day holiday" {
             let json = """
@@ -42,7 +42,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (parseHolidaysResponse json)
+            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (Holiday.parseResponseBody json)
         }
 
         test "Parses afternoon holiday" {
@@ -71,7 +71,7 @@ let tests =
                 }
             ]
             
-            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (parseHolidaysResponse json)
+            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (Holiday.parseResponseBody json)
         }
 
         test "Parses morning holiday" {
@@ -100,7 +100,7 @@ let tests =
                 }
             ]
             
-            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (parseHolidaysResponse json)
+            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (Holiday.parseResponseBody json)
         }
 
         test "Parses a multi-day holiday" {
@@ -129,6 +129,28 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the single multi-day holiday to be parsed" (parseHolidaysResponse json)
+            expectAbsences expected "Expected the single multi-day holiday to be parsed" (Holiday.parseResponseBody json)
+        }
+
+        test "Errors because of unexpected \"Part of the Day\" value" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "Employee Id": "E3",
+                        "First Name": "Damo",
+                        "Last Name": "Winto",
+                        "Department": "Dota",
+                        "Holiday Start Date": "2018/01/22",
+                        "Holiday End Date": "2018/02/02",
+                        "Part of the Day": "the spanish inquisition",
+                        "Holiday Duration (Days)": 9.0,
+                        "Holiday Status": "Approved"
+                    }
+                ]
+            }"""
+
+            Expect.isError (Holiday.parseResponseBody json) "Expected \"the spanish inquisition\" to cause can error when determining holiday duration"
         }
     ]
