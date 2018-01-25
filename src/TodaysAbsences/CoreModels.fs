@@ -15,9 +15,14 @@ type Employee = {
 }
 
 
+type PartOfDay =
+    | Am
+    | Pm
+
+
 type Duration =
-    | Hours of int
     | Days of int
+    | LessThanADay of PartOfDay
 
 
 type Absence = {
