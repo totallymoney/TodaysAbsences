@@ -124,3 +124,11 @@ module Sick =
 
     let parseResponseBody =
         SickResponse.Parse >> (fun x -> x.Result) >> mapToSicks >> foldIntoSingleResult
+
+
+
+module OtherEvent =
+
+
+    let parseResponseBody json =
+        Error "Not implemented"

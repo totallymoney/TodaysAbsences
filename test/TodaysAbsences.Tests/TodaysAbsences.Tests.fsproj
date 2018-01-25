@@ -6,8 +6,10 @@
     <FscToolExe>fsharpc</FscToolExe>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helpers.fs" />
     <Compile Include="PeopleHrHolidayResponseParsingTests.fs" />
     <Compile Include="PeopleHrSickResponseParsingTests.fs" />
+    <Compile Include="PeopleHrOtherEventResponseParsingTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

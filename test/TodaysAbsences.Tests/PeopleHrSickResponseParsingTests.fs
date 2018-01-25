@@ -1,15 +1,11 @@
 module PeopleHrSickResponseParsingTests
 
 
-open Expecto
 open CoreModels
+open Expecto
+open Helpers
 open PeopleHrApi
 
-
-let private expectAbsences (expected:Absence list) message result =
-    let expector absences = Expect.equal absences expected message
-    Expect.isOk result "Expected the parsing to be successful"
-    Result.map expector result |> ignore
 
 
 [<Tests>]

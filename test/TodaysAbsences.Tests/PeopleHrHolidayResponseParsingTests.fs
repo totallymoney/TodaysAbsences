@@ -3,13 +3,8 @@ module PeopleHrHolidayResponseParsingTests
 
 open Expecto
 open CoreModels
+open Helpers
 open PeopleHrApi
-
-
-let private expectAbsences (expected:Absence list) message result =
-    let expector absences = Expect.equal expected absences message
-    Expect.isOk result "Expected the parsing to be successful"
-    Result.map expector result |> ignore
 
 
 [<Tests>]

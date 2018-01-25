@@ -2,10 +2,15 @@ module CoreModels
 
 
 type KindOfAbsense =
-    | Holiday
-    | Sick
-    | Wfh
     | Appointment
+    | Compassionate
+    | Holiday
+    | NoReasonRecorded
+    | Sick
+    | StudyLeave
+    | Training
+    | Wfh
+
 
 
 type Employee = {
