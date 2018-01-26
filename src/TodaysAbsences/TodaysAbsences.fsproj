@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Include="CoreModels.fs" />
     <Compile Include="PeopleHrApi.fs" />
+    <Compile Include="SlackMessage.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="2.4.4" />

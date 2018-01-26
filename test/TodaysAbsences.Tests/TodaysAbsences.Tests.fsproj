@@ -10,6 +10,7 @@
     <Compile Include="PeopleHrHolidayResponseParsingTests.fs" />
     <Compile Include="PeopleHrSickResponseParsingTests.fs" />
     <Compile Include="PeopleHrOtherEventResponseParsingTests.fs" />
+    <Compile Include="SlackMessageTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

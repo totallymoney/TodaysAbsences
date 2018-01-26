@@ -119,7 +119,7 @@ module Sick =
 
 
 [<Literal>]
-let otherEventSample = """
+let private otherEventSample = """
 {
     "isError": false,
     "Result": [
@@ -139,7 +139,7 @@ let otherEventSample = """
 """
 
 
-type OtherEventResponse = JsonProvider<otherEventSample>
+type private OtherEventResponse = JsonProvider<otherEventSample>
 
 
 module OtherEvent =
