@@ -5,7 +5,6 @@ type KindOfAbsense =
     | Appointment
     | Compassionate
     | Holiday
-    | NoReasonRecorded
     | Sick
     | StudyLeave
     | Training

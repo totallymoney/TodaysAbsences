@@ -20,12 +20,9 @@ let private holidayResponseSample = """{
     "isError": false,
     "Result": [
         {
-            "Employee Id": "E1",
             "First Name": "Joe",
             "Last Name": "Bloggs",
             "Department": "Development",
-            "Holiday Start Date": "2018/01/23",
-            "Holiday End Date": "2018/01/23",
             "Part of the Day": "PM",
             "Holiday Duration (Days)": 0.5
         }
@@ -74,16 +71,11 @@ let private sickResponseSample = """{
     "isError": false,
     "Result": [
         {
-            "Employee Id": "E1",
             "First Name": "Edward",
             "Last Name": "Dewhurst",
             "Department": "Development",
-            "Sick Start Date": "2018/01/18",
-            "Sick End Date": "2018/01/18",
-            "Sick Duration Type": "Full day",
             "Sick (AM/PM)": "AM",
-            "Sick Duration (Days)": 1,
-            "Sick Duration (Hrs)": "8:00"
+            "Sick Duration (Days)": 1
         }
     ]
 }
@@ -114,7 +106,7 @@ module Sick =
 
 
 
-    let private mapToSicks =
+    let private mapToAbsences =
         let mapper (r:SickResponse.Result) =
             match duration r with
             | Ok d -> Ok { employee = employee r; kind = Sick; duration = d}
@@ -123,12 +115,72 @@ module Sick =
         Array.map mapper
 
     let parseResponseBody =
-        SickResponse.Parse >> (fun x -> x.Result) >> mapToSicks >> foldIntoSingleResult
+        SickResponse.Parse >> (fun x -> x.Result) >> mapToAbsences >> foldIntoSingleResult
 
+
+[<Literal>]
+let otherEventSample = """
+{
+    "isError": false,
+    "Result": [
+        {
+            "First Name": "Michael",
+            "Last Name": "Scott",
+            "Department": "Design",
+            "Other Events Duration Type": "Hours",
+            "Other Events Reason": "Appointment",
+            "Other Events Start Time": {
+              "Hours": 10
+            },
+            "Other Events Total Duration (Days)": 0.4
+        }
+    ]
+}
+"""
+
+
+type OtherEventResponse = JsonProvider<otherEventSample>
 
 
 module OtherEvent =
 
 
-    let parseResponseBody json =
-        Error "Not implemented"
+    let private duration (r:OtherEventResponse.Result) =
+        match r.OtherEventsDurationType with
+        | "Days" -> r.OtherEventsTotalDurationDays |> Decimal.ToInt32 |> Days |> Ok
+        | "Hours" ->
+            if r.OtherEventsStartTime.Hours <= 12 then
+                LessThanADay Am |> Ok
+            else
+                LessThanADay Pm |> Ok
+        | _ -> invalidOp "SHIT"
+
+    
+    let private employee (r:OtherEventResponse.Result) =
+        { firstName = r.FirstName; lastName = r.LastName; department = r.Department }
+
+
+    let private kind (r:OtherEventResponse.Result) =
+        match r.OtherEventsReason with
+        | "Appointment" -> Ok Appointment
+        | "Compassionate" -> Ok Compassionate
+        | "Study Leave" -> Ok StudyLeave
+        | "Training" -> Ok Training
+        | "Working from Home" -> Ok Wfh
+        | unexpected -> Error (sprintf "Unexpected \"Other Events Reason\" value: %s" unexpected)
+
+
+    let private mapToAbsences =
+        let mapper (r:OtherEventResponse.Result) =
+            match duration r with
+            | Ok d ->
+                match kind r with
+                | Ok k -> Ok { employee = employee r; kind = k; duration = d }
+                | Error message -> Error message
+            | Error message -> Error message
+        
+        Array.map mapper
+
+
+    let parseResponseBody =
+        OtherEventResponse.Parse >> (fun x -> x.Result) >> mapToAbsences >> foldIntoSingleResult

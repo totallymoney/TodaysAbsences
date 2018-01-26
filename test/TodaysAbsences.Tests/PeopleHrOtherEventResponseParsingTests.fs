@@ -10,33 +10,22 @@ open PeopleHrApi
 [<Tests>]
 let tests =
     testList "People HR API Other Event Response parsing" [
+
         test "Parses a one day appointment" {
             let json = """
             {
                 "isError": false,
                 "Result": [
                     {
-                        "Employee Id": "TM0078",
+                        "Employee Id": "E999",
                         "First Name": "Santa",
                         "Last Name": "Claus",
                         "Department": "Commercial",
-                        "Other Events Duration Type": "Hours",
+                        "Other Events Duration Type": "Days",
                         "Other Events Reason": "Appointment",
                         "Other Events Start Date": "2018/01/15",
-                        "Other Events Start Time": {
-                          "Ticks": 540000000000,
-                          "Days": 0,
-                          "Hours": 15,
-                          "Milliseconds": 0,
-                          "Minutes": 0,
-                          "Seconds": 0,
-                          "TotalDays": 0.625,
-                          "TotalHours": 15,
-                          "TotalMilliseconds": 54000000,
-                          "TotalMinutes": 900,
-                          "TotalSeconds": 54000
-                        },
-                        "Other Events Total Duration (Days)": 0.25
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 1.0
                     }
                 ]
             }"""
@@ -49,5 +38,137 @@ let tests =
             ]
 
             expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (OtherEvent.parseResponseBody json)
+        }
+
+        test "Parses a morning Study Leave" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "First Name": "John",
+                        "Last Name": "Smith",
+                        "Department": "Commercial",
+                        "Other Events Duration Type": "Hours",
+                        "Other Events Reason": "Study Leave",
+                        "Other Events Start Time": {
+                            "Hours": 10
+                        },
+                        "Other Events Total Duration (Days)": 0.25
+                    }
+                ]
+            }"""
+            let expected = [
+                {
+                    employee = { firstName = "John"; lastName = "Smith"; department = "Commercial" }
+                    kind = StudyLeave
+                    duration = LessThanADay Am
+                }
+            ]
+
+            expectAbsences expected "Expected the JSON to be parsed in to a morning study leave (AM)" (OtherEvent.parseResponseBody json)
+        }
+
+        test "Parses a afternoon compassionate leave" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "First Name": "John",
+                        "Last Name": "Smith",
+                        "Department": "Commercial",
+                        "Other Events Duration Type": "Hours",
+                        "Other Events Reason": "Compassionate",
+                        "Other Events Start Time": {
+                            "Hours": 15
+                        },
+                        "Other Events Total Duration (Days)": 0.25
+                    }
+                ]
+            }"""
+            let expected = [
+                {
+                    employee = { firstName = "John"; lastName = "Smith"; department = "Commercial" }
+                    kind = Compassionate
+                    duration = LessThanADay Pm
+                }
+            ]
+
+            expectAbsences expected "Expected the JSON to be parsed in to a morning compassionate leave (AM)" (OtherEvent.parseResponseBody json)
+        }
+
+        test "Parses a two day training" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "First Name": "Albert",
+                        "Last Name": "Camus",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": "Training",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 2
+                    }
+                ]
+            }"""
+            let expected = [
+                {
+                    employee = { firstName = "Albert"; lastName = "Camus"; department = "Development" }
+                    kind = Training
+                    duration = Days 2
+                }
+            ]
+
+            expectAbsences expected "Expected the JSON to be parsed in to a two day training absence" (OtherEvent.parseResponseBody json)
+        }
+
+        test "Parses a three day working from home" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": "Working from Home",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 3
+                    }
+                ]
+            }"""
+            let expected = [
+                {
+                    employee = { firstName = "Martin"; lastName = "Heidigger"; department = "Development" }
+                    kind = Wfh
+                    duration = Days 3
+                }
+            ]
+
+            expectAbsences expected "Expected the JSON to be parsed in to a three day training absence" (OtherEvent.parseResponseBody json)
+        }
+
+        test "Errors because of unexpected null \"Other Events Reason\"" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": null,
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 3
+                    }
+                ]
+            }"""
+
+            Expect.isError (OtherEvent.parseResponseBody json) "Expected an error because of unexpected null \"Other Events Reason\""
         }
     ]
