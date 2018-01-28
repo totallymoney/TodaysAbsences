@@ -7,9 +7,10 @@
   <ItemGroup>
     <Compile Include="CoreModels.fs" />
     <Compile Include="PeopleHrApi.fs" />
-    <Compile Include="SlackMessage.fs" />
+    <Compile Include="SlackApi.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Chiron" Version="6.2.1" />
     <PackageReference Include="FSharp.Data" Version="2.4.4" />
   </ItemGroup>
 </Project>
