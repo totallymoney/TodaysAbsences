@@ -4,12 +4,14 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CoreModels.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.1.0" />
+    <Compile Include="Handler.fs" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Amazon.Lambda.Tools" Version="1.6.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TodaysAbsences\TodaysAbsences.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\fcs.props" />
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
