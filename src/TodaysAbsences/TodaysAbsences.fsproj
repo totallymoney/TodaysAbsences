@@ -1,16 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <FscToolPath>/usr/local/bin</FscToolPath>
-    <FscToolExe>fsharpc</FscToolExe>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CoreModels.fs" />
     <Compile Include="PeopleHrApi.fs" />
     <Compile Include="SlackApi.fs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Chiron" Version="6.2.1" />
-    <PackageReference Include="FSharp.Data" Version="2.4.4" />
-  </ItemGroup>
+  <Import Project="..\..\fcs.props" />
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
