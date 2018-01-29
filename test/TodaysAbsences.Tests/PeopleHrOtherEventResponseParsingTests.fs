@@ -171,4 +171,25 @@ let tests =
 
             Expect.isError (OtherEvent.parseResponseBody json) "Expected an error because of unexpected null \"Other Events Reason\""
         }
+
+        test "Errors because of unexpected null \"Other Events Duration Type\"" {
+                let json = """
+                {
+                    "isError": false,
+                    "Result": [
+                        {
+                            "First Name": "Martin",
+                            "Last Name": "Heidigger",
+                            "Department": "Development",
+                            "Other Events Duration Type": null,
+                            "Other Events Reason": "Appointment",
+                            "Other Events Start Time": null,
+                            "Other Events Total Duration (Days)": 3
+                        }
+                    ]
+                }"""
+
+                Expect.isError (OtherEvent.parseResponseBody json) "Expected an error because of unexpected null \"Other Events Duration Type\""
+        }
+
     ]

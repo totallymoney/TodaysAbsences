@@ -2,6 +2,7 @@ module PeopleHrApi
 
 
 open CoreModels
+open Http
 open FSharp.Data
 open System
 
@@ -145,6 +146,13 @@ type private OtherEventResponse = JsonProvider<otherEventSample>
 module OtherEvent =
 
 
+    let private unexpectedValueMessage fieldName value =
+        if isNull value then
+            sprintf "Unexpected %s value: (null)" fieldName
+        else
+            sprintf "Unexpected %s value: %s" fieldName value
+
+
     let private duration (r:OtherEventResponse.Result) =
         match r.OtherEventsDurationType with
         | "Days" -> r.OtherEventsTotalDurationDays |> Decimal.ToInt32 |> Days |> Ok
@@ -153,7 +161,8 @@ module OtherEvent =
                 LessThanADay Am |> Ok
             else
                 LessThanADay Pm |> Ok
-        | _ -> invalidOp "SHIT"
+        | unexpected ->
+            Error (unexpectedValueMessage "Other Events Duration Type" unexpected)
 
     
     let private employee (r:OtherEventResponse.Result) =
@@ -167,7 +176,8 @@ module OtherEvent =
         | "Study Leave" -> Ok StudyLeave
         | "Training" -> Ok Training
         | "Working from Home" -> Ok Wfh
-        | unexpected -> Error (sprintf "Unexpected \"Other Events Reason\" value: %s" unexpected)
+        | unexpected ->
+            Error (unexpectedValueMessage "Other Events Reason" unexpected)
 
 
     let private mapToAbsences =
@@ -184,3 +194,46 @@ module OtherEvent =
 
     let parseResponseBody =
         OtherEventResponse.Parse >> (fun x -> x.Result) >> mapToAbsences >> foldIntoSingleResult
+
+
+module Http =
+
+
+    let private queryRequestBody queryName apiKey =
+        sprintf
+            """{"APIKey":"%s","Action":"GetQueryResultByQueryName","QueryName":"%s"}"""
+            apiKey
+            queryName
+
+
+    let private query queryName =
+        queryRequestBody queryName >> postJson "https://api.peoplehr.net/Query"
+
+
+    let private getEmployeesWithHolidayToday =
+        query "Employees on holiday today" >> Result.bind Holiday.parseResponseBody
+
+
+    let private getEmployeesWithSickToday =
+        query "Employees absent/sick today" >> Result.bind Sick.parseResponseBody
+
+
+    let private getEmployeesWithOtherEventToday =
+        query "Employees with other events today" >> Result.bind OtherEvent.parseResponseBody
+
+
+    let getAbsences apiKey =
+        let holidaysR = getEmployeesWithHolidayToday apiKey
+        let sicksR = getEmployeesWithSickToday apiKey
+        let otherR = getEmployeesWithOtherEventToday apiKey
+
+        match holidaysR with
+        | Error message -> Error message
+        | Ok holidays ->
+            match sicksR with
+            | Error message -> Error message
+            | Ok sicks ->
+                match otherR with
+                | Error message -> Error message
+                | Ok others ->
+                    Ok (List.concat [ holidays; sicks; others ])

@@ -3,6 +3,7 @@ module SlackApi
 
 open CoreModels
 open Chiron
+open Http
 
 
 type AttachmentField =
@@ -62,6 +63,7 @@ let private kindString = function
     | StudyLeave -> "Study Leave"
     | Training -> "Training"
     | Wfh -> "Working from Home"
+    | Unknown -> "Unknown"
 
 
 let private durationString = function
@@ -97,3 +99,10 @@ let messageJson absences = { attachments = [ { baseAttachment with fields = fiel
 
 let messageJsonString (message:Message) =
     Json.serialize message |> Json.format
+
+
+module Http =
+
+
+    let sendMessage url =
+        messageJson >> messageJsonString >> postJson url

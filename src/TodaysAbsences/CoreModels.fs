@@ -9,6 +9,7 @@ type KindOfAbsense =
     | StudyLeave
     | Training
     | Wfh
+    | Unknown
 
 
 
