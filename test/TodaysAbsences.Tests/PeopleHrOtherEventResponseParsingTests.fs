@@ -152,7 +152,7 @@ let tests =
             expectAbsences expected "Expected the JSON to be parsed in to a three day training absence" (OtherEvent.parseResponseBody json)
         }
 
-        test "Errors because of unexpected null \"Other Events Reason\"" {
+        test "Ignores event with null \"Other Events Reason\"" {
             let json = """
             {
                 "isError": false,
@@ -169,27 +169,27 @@ let tests =
                 ]
             }"""
 
-            Expect.isError (OtherEvent.parseResponseBody json) "Expected an error because of unexpected null \"Other Events Reason\""
+            expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
         }
 
-        test "Errors because of unexpected null \"Other Events Duration Type\"" {
-                let json = """
-                {
-                    "isError": false,
-                    "Result": [
-                        {
-                            "First Name": "Martin",
-                            "Last Name": "Heidigger",
-                            "Department": "Development",
-                            "Other Events Duration Type": null,
-                            "Other Events Reason": "Appointment",
-                            "Other Events Start Time": null,
-                            "Other Events Total Duration (Days)": 3
-                        }
-                    ]
-                }"""
+        test "Ignores event with null \"Other Events Duration Type\"" {
+            let json = """
+            {
+                "isError": false,
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": null,
+                        "Other Events Reason": "Appointment",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 3
+                    }
+                ]
+            }"""
 
-                Expect.isError (OtherEvent.parseResponseBody json) "Expected an error because of unexpected null \"Other Events Duration Type\""
+            expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
         }
 
     ]

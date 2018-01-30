@@ -155,14 +155,15 @@ module OtherEvent =
 
     let private duration (r:OtherEventResponse.Result) =
         match r.OtherEventsDurationType with
-        | "Days" -> r.OtherEventsTotalDurationDays |> Decimal.ToInt32 |> Days |> Ok
+        | "Days" ->
+            r.OtherEventsTotalDurationDays |> Decimal.ToInt32 |> Days |> Ok
         | "Hours" ->
             if r.OtherEventsStartTime.Hours <= 12 then
                 LessThanADay Am |> Ok
             else
                 LessThanADay Pm |> Ok
-        | unexpected ->
-            Error (unexpectedValueMessage "Other Events Duration Type" unexpected)
+        | _ ->
+            Ok UnknownDuration
 
     
     let private employee (r:OtherEventResponse.Result) =
@@ -176,8 +177,7 @@ module OtherEvent =
         | "Study Leave" -> Ok StudyLeave
         | "Training" -> Ok Training
         | "Working from Home" -> Ok Wfh
-        | unexpected ->
-            Error (unexpectedValueMessage "Other Events Reason" unexpected)
+        | _ -> Ok UnknownKind
 
 
     let private mapToAbsences =
@@ -192,8 +192,21 @@ module OtherEvent =
         Array.map mapper
 
 
+    let private filterUnknownDurations =
+        Result.map (List.filter (fun a -> match a.duration with | UnknownDuration -> false | _ -> true))
+
+
+    let private filterUnknownKinds : (Result<Absence list, string> -> Result<Absence list, string>) =
+        Result.map (List.filter (fun a -> match a.kind with | UnknownKind -> false | _ -> true))
+
+
     let parseResponseBody =
-        OtherEventResponse.Parse >> (fun x -> x.Result) >> mapToAbsences >> foldIntoSingleResult
+        OtherEventResponse.Parse
+        >> (fun x -> x.Result)
+        >> mapToAbsences
+        >> foldIntoSingleResult 
+        >> filterUnknownDurations
+        >> filterUnknownKinds
 
 
 module Http =

@@ -9,8 +9,7 @@ type KindOfAbsense =
     | StudyLeave
     | Training
     | Wfh
-    | Unknown
-
+    | UnknownKind
 
 
 type Employee = {
@@ -28,6 +27,7 @@ type PartOfDay =
 type Duration =
     | Days of int
     | LessThanADay of PartOfDay
+    | UnknownDuration
 
 
 type Absence = {
