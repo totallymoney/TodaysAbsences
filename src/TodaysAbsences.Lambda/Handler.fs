@@ -4,6 +4,7 @@ module Handler
 open Amazon.Lambda.Core
 open PeopleHrApi.Http
 open SlackApi.Http
+open System.IO
 
 
 [<assembly: LambdaSerializer(typeof<Amazon.Lambda.Serialization.Json.JsonSerializer>)>]
@@ -24,7 +25,7 @@ let private sendTodaysAbsencesMessage apiKey webhookUrl =
     getAbsences apiKey |> Result.bind (sendMessage webhookUrl)
 
 
-let handler (_:string, _:ILambdaContext) =
+let handler (_:Stream, _:ILambdaContext) =
     let peopleHrApiKey = getEnvVarOrThrowIfMissing "PEOPLEHR_API_KEY"
     let slackWebhookUrl = getEnvVarOrThrowIfMissing "SLACK_WEBHOOK_URL"
 
