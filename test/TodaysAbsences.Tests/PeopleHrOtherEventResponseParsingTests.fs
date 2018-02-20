@@ -33,7 +33,7 @@ let tests =
                 {
                     employee = { firstName = "Santa"; lastName = "Claus"; department = "Commercial" }
                     kind = Appointment
-                    duration = Days 1
+                    duration = Days 1m
                 }
             ]
 
@@ -118,7 +118,7 @@ let tests =
                 {
                     employee = { firstName = "Albert"; lastName = "Camus"; department = "Development" }
                     kind = Training
-                    duration = Days 2
+                    duration = Days 2m
                 }
             ]
 
@@ -145,7 +145,7 @@ let tests =
                 {
                     employee = { firstName = "Martin"; lastName = "Heidigger"; department = "Development" }
                     kind = Wfh
-                    duration = Days 3
+                    duration = Days 3m
                 }
             ]
 
@@ -191,5 +191,8 @@ let tests =
 
             expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
         }
-
+ 
+                        // "Other Events Start Time": {
+                        //     "Hours": null
+                        // },
     ]

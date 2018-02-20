@@ -11,7 +11,7 @@ open PeopleHrApi
 let tests =
     testList "People HR API Holiday Response parsing" [
 
-        test "Parses 1 day holiday" {
+        test "Parses a 1 day holiday" {
             let json = """
             {
                 "isError": false,
@@ -21,11 +21,8 @@ let tests =
                         "First Name": "Bugs",
                         "Last Name": "Bunny",
                         "Department": "Development",
-                        "Holiday Start Date": "2018/01/23",
-                        "Holiday End Date": "2018/01/23",
                         "Part of the Day": null,
-                        "Holiday Duration (Days)": 1,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 1
                     }
                 ]
             }"""
@@ -33,7 +30,7 @@ let tests =
                 {
                     employee = { firstName = "Bugs"; lastName = "Bunny"; department = "Development" }
                     kind = Holiday
-                    duration = Days 1
+                    duration = Days 1m
                 }
             ]
 
@@ -50,11 +47,8 @@ let tests =
                         "First Name": "Daffy",
                         "Last Name": "Duck",
                         "Department": "Marketing",
-                        "Holiday Start Date": "2018/01/23",
-                        "Holiday End Date": "2018/01/23",
                         "Part of the Day": "PM",
-                        "Holiday Duration (Days)": 0.5,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 0.5
                     }
                 ]
             }"""
@@ -79,11 +73,8 @@ let tests =
                         "First Name": "Lola",
                         "Last Name": "Bunny",
                         "Department": "Management",
-                        "Holiday Start Date": "2018/01/23",
-                        "Holiday End Date": "2018/01/23",
                         "Part of the Day": "AM",
-                        "Holiday Duration (Days)": 0.5,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 0.5
                     }
                 ]
             }"""
@@ -108,11 +99,8 @@ let tests =
                         "First Name": "Damo",
                         "Last Name": "Winto",
                         "Department": "Dota",
-                        "Holiday Start Date": "2018/01/22",
-                        "Holiday End Date": "2018/02/02",
                         "Part of the Day": null,
-                        "Holiday Duration (Days)": 9.0,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 9.0
                     }
                 ]
             }"""
@@ -120,7 +108,7 @@ let tests =
                 {
                     employee = { firstName = "Damo"; lastName = "Winto"; department = "Dota" }
                     kind = Holiday
-                    duration = Days 9
+                    duration = Days 9m
                 }
             ]
 
@@ -137,11 +125,8 @@ let tests =
                         "First Name": "Damo",
                         "Last Name": "Winto",
                         "Department": "Dota",
-                        "Holiday Start Date": "2018/01/22",
-                        "Holiday End Date": "2018/02/02",
                         "Part of the Day": "the spanish inquisition",
-                        "Holiday Duration (Days)": 9.0,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 9.0
                     }
                 ]
             }"""

@@ -25,7 +25,7 @@ type PartOfDay =
 
 
 type Duration =
-    | Days of int
+    | Days of decimal
     | LessThanADay of PartOfDay
     | UnknownDuration
 

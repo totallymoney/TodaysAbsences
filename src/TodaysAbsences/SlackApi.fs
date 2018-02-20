@@ -66,7 +66,7 @@ let private kindString = function
 
 
 let private durationString = function
-    | Days count -> sprintf "%i days" count
+    | Days count -> sprintf "%M days" count
     | LessThanADay Am -> "Part-day (AM)"
     | LessThanADay Pm -> "Part-day (PM)"
     | UnknownDuration -> "Unknown duration"

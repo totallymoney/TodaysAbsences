@@ -21,12 +21,8 @@ let tests =
                         "First Name": "Edward",
                         "Last Name": "Dewhurst",
                         "Department": "Development",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": "Full day",
                         "Sick (AM/PM)": null,
-                        "Sick Duration (Days)": 1,
-                        "Sick Duration (Hrs)": "8:00"
+                        "Sick Duration (Days)": 1
                     }
                 ]
             }"""
@@ -34,7 +30,7 @@ let tests =
                 {
                     employee = { firstName = "Edward"; lastName = "Dewhurst"; department = "Development" }
                     kind = Sick
-                    duration = Days 1
+                    duration = Days 1m
                 }
             ]
 
@@ -51,12 +47,8 @@ let tests =
                         "First Name": "Elmer",
                         "Last Name": "Fudd",
                         "Department": "Wabbit Hunting",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": null,
                         "Sick (AM/PM)": "AM",
-                        "Sick Duration (Days)": null,
-                        "Sick Duration (Hrs)": "4:00"
+                        "Sick Duration (Days)": null
                     }
                 ]
             }"""
@@ -81,12 +73,8 @@ let tests =
                         "First Name": "Foghorn",
                         "Last Name": "Leghorn",
                         "Department": "I said",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": null,
                         "Sick (AM/PM)": "PM",
-                        "Sick Duration (Days)": null,
-                        "Sick Duration (Hrs)": "4:00"
+                        "Sick Duration (Days)": null
                     }
                 ]
             }"""
@@ -111,12 +99,8 @@ let tests =
                         "First Name": "Foghorn",
                         "Last Name": "Leghorn",
                         "Department": "I said",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": null,
                         "Sick (AM/PM)": "foobar",
-                        "Sick Duration (Days)": null,
-                        "Sick Duration (Hrs)": "4:00"
+                        "Sick Duration (Days)": null
                     }
                 ]
             }"""
