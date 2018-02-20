@@ -191,8 +191,4 @@ let tests =
 
             expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
         }
- 
-                        // "Other Events Start Time": {
-                        //     "Hours": null
-                        // },
     ]
