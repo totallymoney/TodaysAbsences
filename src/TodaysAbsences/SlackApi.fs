@@ -63,6 +63,7 @@ let private kindString = function
     | StudyLeave -> "Study Leave"
     | Training -> "Training"
     | Wfh -> "Working from Home"
+    | UnknownKind -> "Unknown reason"
 
 
 let private durationString = function
