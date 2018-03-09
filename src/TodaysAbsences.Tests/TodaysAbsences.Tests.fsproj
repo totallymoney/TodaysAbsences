@@ -16,7 +16,7 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TodaysAbsences\TodaysAbsences.fsproj" />
+    <ProjectReference Include="..\TodaysAbsences\TodaysAbsences.fsproj" />
   </ItemGroup>
   <Import Project="..\..\fcs.props" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
