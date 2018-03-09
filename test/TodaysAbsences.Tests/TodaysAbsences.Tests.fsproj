@@ -4,6 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="PeopleHrHolidayResponseParsingTests.fs" />

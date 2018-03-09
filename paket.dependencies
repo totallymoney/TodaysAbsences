@@ -1,6 +1,6 @@
 source https://www.nuget.org/api/v2
 nuget Amazon.Lambda.Serialization.Json
-nuget Amazon.Lambda.Tools
+clitool Amazon.Lambda.Tools
 nuget Chiron
 nuget Expecto
 nuget FSharp.Data

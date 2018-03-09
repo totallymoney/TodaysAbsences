@@ -3,11 +3,11 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Handler.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Amazon.Lambda.Tools" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TodaysAbsences\TodaysAbsences.fsproj" />
