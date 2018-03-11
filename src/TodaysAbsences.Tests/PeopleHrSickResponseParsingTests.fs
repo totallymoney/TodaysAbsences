@@ -15,6 +15,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E1",
@@ -41,6 +42,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
@@ -67,6 +69,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
@@ -93,6 +96,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
@@ -106,5 +110,17 @@ let tests =
             }"""
 
             Expect.isError (Sick.parseResponseBody json) "Expected \"foobar\" to cause an error when determining the sick duration"
+        }
+
+        test "Parses empty/\"No records found\" response in to empty collection" {
+            let json = """
+                {
+                    "isError":false,
+                    "Status":10,
+                    "Message":"No records found.",
+                    "Result":""
+                }"""
+            
+            expectAbsences [] "Expected a empty collection of absences" (Sick.parseResponseBody json)
         }
     ]
