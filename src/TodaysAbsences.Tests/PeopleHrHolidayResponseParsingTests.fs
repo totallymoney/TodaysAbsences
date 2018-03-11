@@ -15,6 +15,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E1",
@@ -41,6 +42,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E4",
@@ -67,6 +69,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
@@ -93,6 +96,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E3",
@@ -119,6 +123,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E3",
@@ -132,5 +137,17 @@ let tests =
             }"""
 
             Expect.isError (Holiday.parseResponseBody json) "Expected \"the spanish inquisition\" to cause can error when determining holiday duration"
+        }
+
+        test "Parses empty/\"No records found\" response in to empty collection" {
+            let json = """
+                {
+                    "isError":false,
+                    "Status":10,
+                    "Message":"No records found.",
+                    "Result":""
+                }"""
+            
+            expectAbsences [] "Expected a empty collection of absences" (Holiday.parseResponseBody json)
         }
     ]
