@@ -15,6 +15,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E999",
@@ -44,6 +45,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "First Name": "John",
@@ -73,6 +75,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "First Name": "John",
@@ -102,6 +105,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "First Name": "Albert",
@@ -129,6 +133,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "First Name": "Martin",
@@ -156,6 +161,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "First Name": "Martin",
@@ -176,6 +182,7 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "First Name": "Martin",
@@ -190,5 +197,17 @@ let tests =
             }"""
 
             expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
+        }
+
+        test "Parses empty/\"No records found\" response in to empty collection" {
+            let json = """
+                {
+                    "isError":false,
+                    "Status":10,
+                    "Message":"No records found.",
+                    "Result":""
+                }"""
+            
+            expectAbsences [] "Expected a empty collection of absences" (OtherEvent.parseResponseBody json)
         }
     ]

@@ -272,17 +272,39 @@ type OtherEventResponse =
 type OtherEventResponseWrapper =
     {
         isError : bool
+        Message : string
         Result : OtherEventResponse array
     }
 
     static member FromJson (_:OtherEventResponseWrapper) = json {
         let! isError = Json.read "isError"
-        let! result = Json.read "Result"
-        return
-            {
-                isError = isError
-                Result = result
-            }
+        let! message = Json.read "Message"
+
+        if message = "No records found." then
+            return
+                {
+                    isError = isError
+                    Message = message
+                    Result = [||]
+                }
+        else
+            let! result = Json.read "Result"
+
+            match result with
+            | Some r ->
+                return
+                    {
+                        isError = isError
+                        Message = message
+                        Result = r
+                    }
+            | None ->
+                return
+                    {
+                        isError = isError
+                        Message = message
+                        Result = [||]
+                    }
     }
 
 module OtherEvent =
