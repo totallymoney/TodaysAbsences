@@ -11,21 +11,19 @@ open PeopleHrApi
 let tests =
     testList "People HR API Holiday Response parsing" [
 
-        test "Parses 1 day holiday" {
+        test "Parses a 1 day holiday" {
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E1",
                         "First Name": "Bugs",
                         "Last Name": "Bunny",
                         "Department": "Development",
-                        "Holiday Start Date": "2018/01/23",
-                        "Holiday End Date": "2018/01/23",
                         "Part of the Day": null,
-                        "Holiday Duration (Days)": 1,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 1
                     }
                 ]
             }"""
@@ -33,7 +31,7 @@ let tests =
                 {
                     employee = { firstName = "Bugs"; lastName = "Bunny"; department = "Development" }
                     kind = Holiday
-                    duration = Days 1
+                    duration = Days 1m
                 }
             ]
 
@@ -44,17 +42,15 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E4",
                         "First Name": "Daffy",
                         "Last Name": "Duck",
                         "Department": "Marketing",
-                        "Holiday Start Date": "2018/01/23",
-                        "Holiday End Date": "2018/01/23",
                         "Part of the Day": "PM",
-                        "Holiday Duration (Days)": 0.5,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 0.5
                     }
                 ]
             }"""
@@ -73,17 +69,15 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
                         "First Name": "Lola",
                         "Last Name": "Bunny",
                         "Department": "Management",
-                        "Holiday Start Date": "2018/01/23",
-                        "Holiday End Date": "2018/01/23",
                         "Part of the Day": "AM",
-                        "Holiday Duration (Days)": 0.5,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 0.5
                     }
                 ]
             }"""
@@ -102,17 +96,15 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E3",
                         "First Name": "Damo",
                         "Last Name": "Winto",
                         "Department": "Dota",
-                        "Holiday Start Date": "2018/01/22",
-                        "Holiday End Date": "2018/02/02",
                         "Part of the Day": null,
-                        "Holiday Duration (Days)": 9.0,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 9.0
                     }
                 ]
             }"""
@@ -120,7 +112,7 @@ let tests =
                 {
                     employee = { firstName = "Damo"; lastName = "Winto"; department = "Dota" }
                     kind = Holiday
-                    duration = Days 9
+                    duration = Days 9m
                 }
             ]
 
@@ -131,21 +123,31 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E3",
                         "First Name": "Damo",
                         "Last Name": "Winto",
                         "Department": "Dota",
-                        "Holiday Start Date": "2018/01/22",
-                        "Holiday End Date": "2018/02/02",
                         "Part of the Day": "the spanish inquisition",
-                        "Holiday Duration (Days)": 9.0,
-                        "Holiday Status": "Approved"
+                        "Holiday Duration (Days)": 9.0
                     }
                 ]
             }"""
 
             Expect.isError (Holiday.parseResponseBody json) "Expected \"the spanish inquisition\" to cause can error when determining holiday duration"
+        }
+
+        test "Parses empty/\"No records found\" response in to empty collection" {
+            let json = """
+                {
+                    "isError":false,
+                    "Status":10,
+                    "Message":"No records found.",
+                    "Result":""
+                }"""
+            
+            expectAbsences [] "Expected a empty collection of absences" (Holiday.parseResponseBody json)
         }
     ]

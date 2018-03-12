@@ -63,10 +63,11 @@ let private kindString = function
     | StudyLeave -> "Study Leave"
     | Training -> "Training"
     | Wfh -> "Working from Home"
+    | UnknownKind -> "Unknown reason"
 
 
 let private durationString = function
-    | Days count -> sprintf "%i days" count
+    | Days count -> sprintf "%M days" count
     | LessThanADay Am -> "Part-day (AM)"
     | LessThanADay Pm -> "Part-day (PM)"
     | UnknownDuration -> "Unknown duration"

@@ -32,12 +32,12 @@ let tests =
                     {
                         employee = { firstName = "Joe"; lastName = "Bloggs"; department = "Development" }
                         kind = Holiday
-                        duration = Days 4
+                        duration = Days 4m
                     }
                     {
                         employee = { firstName = "John"; lastName = "Smith"; department = "Development" }
                         kind = Wfh
-                        duration = Days 1
+                        duration = Days 1m
                     }
                 ]
                 let expectedFields = [
@@ -61,7 +61,7 @@ let tests =
                     {
                         employee = { firstName = "Steve"; lastName = "Jobs"; department = "Marketing" }
                         kind = Training
-                        duration = Days 2
+                        duration = Days 2m
                     }
                 ]
                 let expectedFields = [
@@ -84,22 +84,22 @@ let tests =
                     {
                         employee = { firstName = "Julius"; lastName = "Caesar"; department = "Department D" }
                         kind = Training
-                        duration = Days 2
+                        duration = Days 2m
                     }
                     {
                         employee = { firstName = "Dead"; lastName = "Mau5"; department = "Department C" }
                         kind = Training
-                        duration = Days 2
+                        duration = Days 2m
                     }
                     {
                         employee = { firstName = "Mark"; lastName = "Antony"; department = "Department A" }
                         kind = Training
-                        duration = Days 2
+                        duration = Days 2m
                     }
                     {
                         employee = { firstName = "James"; lastName = "Bond"; department = "Department B" }
                         kind = Training
-                        duration = Days 2
+                        duration = Days 2m
                     }
                 ]
                 let expectedFields = [
@@ -132,27 +132,27 @@ let tests =
                 {
                     employee = { firstName = "Alice"; lastName = "of Wonderland"; department = "Sales" }
                     kind = Appointment
-                    duration = Days 1
+                    duration = Days 1m
                 }
                 {
                     employee = { firstName = "Trevor"; lastName = "McTest"; department = "Design" }
                     kind = Holiday
-                    duration = Days 1
+                    duration = Days 1m
                 }
                 {
                     employee = { firstName = "Edward"; lastName = "Sheeran"; department = "Design" }
                     kind = Holiday
-                    duration = Days 1
+                    duration = Days 1m
                 }
                 {
                     employee = { firstName = "Charles"; lastName = "Chaplin"; department = "Sales" }
                     kind = Appointment
-                    duration = Days 1
+                    duration = Days 1m
                 }
                 {
                     employee = { firstName = "Bob"; lastName = "Feynman"; department = "Sales" }
                     kind = Appointment
-                    duration = Days 1
+                    duration = Days 1m
                 }
             ]
             let expectedFields = [

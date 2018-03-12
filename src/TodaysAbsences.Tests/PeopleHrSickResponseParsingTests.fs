@@ -15,18 +15,15 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E1",
                         "First Name": "Edward",
                         "Last Name": "Dewhurst",
                         "Department": "Development",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": "Full day",
                         "Sick (AM/PM)": null,
-                        "Sick Duration (Days)": 1,
-                        "Sick Duration (Hrs)": "8:00"
+                        "Sick Duration (Days)": 1
                     }
                 ]
             }"""
@@ -34,7 +31,7 @@ let tests =
                 {
                     employee = { firstName = "Edward"; lastName = "Dewhurst"; department = "Development" }
                     kind = Sick
-                    duration = Days 1
+                    duration = Days 1m
                 }
             ]
 
@@ -45,18 +42,15 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
                         "First Name": "Elmer",
                         "Last Name": "Fudd",
                         "Department": "Wabbit Hunting",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": null,
                         "Sick (AM/PM)": "AM",
-                        "Sick Duration (Days)": null,
-                        "Sick Duration (Hrs)": "4:00"
+                        "Sick Duration (Days)": null
                     }
                 ]
             }"""
@@ -75,18 +69,15 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
                         "First Name": "Foghorn",
                         "Last Name": "Leghorn",
                         "Department": "I said",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": null,
                         "Sick (AM/PM)": "PM",
-                        "Sick Duration (Days)": null,
-                        "Sick Duration (Hrs)": "4:00"
+                        "Sick Duration (Days)": null
                     }
                 ]
             }"""
@@ -105,22 +96,31 @@ let tests =
             let json = """
             {
                 "isError": false,
+                "Message":"The requested processed successfully.",
                 "Result": [
                     {
                         "Employee Id": "E2",
                         "First Name": "Foghorn",
                         "Last Name": "Leghorn",
                         "Department": "I said",
-                        "Sick Start Date": "2018/01/18",
-                        "Sick End Date": "2018/01/18",
-                        "Sick Duration Type": null,
                         "Sick (AM/PM)": "foobar",
-                        "Sick Duration (Days)": null,
-                        "Sick Duration (Hrs)": "4:00"
+                        "Sick Duration (Days)": null
                     }
                 ]
             }"""
 
             Expect.isError (Sick.parseResponseBody json) "Expected \"foobar\" to cause an error when determining the sick duration"
+        }
+
+        test "Parses empty/\"No records found\" response in to empty collection" {
+            let json = """
+                {
+                    "isError":false,
+                    "Status":10,
+                    "Message":"No records found.",
+                    "Result":""
+                }"""
+            
+            expectAbsences [] "Expected a empty collection of absences" (Sick.parseResponseBody json)
         }
     ]
