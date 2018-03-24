@@ -1,0 +1,21 @@
+service: TodaysAbsences
+
+provider:
+  name: aws
+  runtime: dotnetcore2.0
+  stage: production
+  region: eu-west-1
+
+ environment:
+   PEOPLEHR_API_KEY: ${env:PEOPLEHR_API_KEY}
+   SLACK_WEBHOOK_URL: ${env:SLACK_WEBHOOK_URL}
+
+# you can add packaging information here
+package:
+  artifact: bin/release/netcoreapp2.0/deploy-package.zip
+
+functions:
+  TodaysAbsences-Function:
+    handler: TodaysAbsences.Lambda::Handler::handler
+    events:
+      - schedule: cron(0 9 * * ? *)
