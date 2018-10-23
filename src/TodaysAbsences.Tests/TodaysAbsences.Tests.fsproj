@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>NU1701</NoWarn>
@@ -19,6 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\TodaysAbsences\TodaysAbsences.fsproj" />
   </ItemGroup>
-  <Import Project="..\..\fcs.props" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

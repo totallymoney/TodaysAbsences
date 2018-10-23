@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>NU1701</NoWarn>
@@ -12,6 +12,5 @@
     <Compile Include="PeopleHrApi.fs" />
     <Compile Include="SlackApi.fs" />
   </ItemGroup>
-  <Import Project="..\..\fcs.props" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -1,6 +1,10 @@
 source https://www.nuget.org/api/v2
-nuget Amazon.Lambda.Serialization.Json
-clitool Amazon.Lambda.Tools
+
+framework: netcoreapp2.0
 nuget Chiron
 nuget Expecto
+nuget FSharp.Core
 nuget FSharp.Data
+nuget Amazon.Lambda.Serialization.Json
+nuget Microsoft.NET.Test.Sdk
+clitool Amazon.Lambda.Tools
