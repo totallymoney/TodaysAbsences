@@ -4,7 +4,11 @@ module PeopleHrApi
 open CoreModels
 open Chiron
 open Http
+open Aether.Optics
+open Core
+open Core.Result
 
+let private results = ResultsBuilder()
 
 let private foldIntoSingleResult results =
     let folder (state:Result<Absence list, string>) (result:Result<Absence, string>) =
@@ -39,6 +43,7 @@ type HolidayResponse =
                 HolidayDurationDays = holidayDurationDays
             }
     }
+
 
 
 type HolidayResponseWrapper =
@@ -411,19 +416,12 @@ module Http =
     let private getEmployeesWithOtherEventToday =
         query "Employees with other events today" >> Result.bind OtherEvent.parseResponseBody
 
-
     let getAbsences apiKey =
-        let holidaysR = getEmployeesWithHolidayToday apiKey
-        let sicksR = getEmployeesWithSickToday apiKey
-        let otherR = getEmployeesWithOtherEventToday apiKey
+        results {
+            let! holidays = getEmployeesWithHolidayToday apiKey
+            let! sicks = getEmployeesWithSickToday apiKey
+            let! otherEvents = getEmployeesWithOtherEventToday apiKey    
 
-        match holidaysR with
-        | Result.Error message -> Result.Error message
-        | Ok holidays ->
-            match sicksR with
-            | Result.Error message -> Result.Error message
-            | Ok sicks ->
-                match otherR with
-                | Result.Error message -> Result.Error message
-                | Ok others ->
-                    Ok (List.concat [ holidays; sicks; others ])
+            return
+                holidays @ sicks @ otherEvents
+        }

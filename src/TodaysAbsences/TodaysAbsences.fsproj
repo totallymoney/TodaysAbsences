@@ -7,6 +7,7 @@
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Core.fs" />
     <Compile Include="CoreModels.fs" />
     <Compile Include="Http.fs" />
     <Compile Include="PeopleHrApi.fs" />
