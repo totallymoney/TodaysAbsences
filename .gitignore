@@ -5,3 +5,4 @@ ignored/
 lambda.zip
 paket-files/
 node_modules/
+.idea

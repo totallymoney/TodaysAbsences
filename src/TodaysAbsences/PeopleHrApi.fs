@@ -4,7 +4,11 @@ module PeopleHrApi
 open CoreModels
 open Chiron
 open Http
+open Aether.Optics
+open Core
+open Core.Result
 
+let private results = ResultsBuilder()
 
 let private foldIntoSingleResult results =
     let folder (state:Result<Absence list, string>) (result:Result<Absence, string>) =
@@ -39,6 +43,7 @@ type HolidayResponse =
                 HolidayDurationDays = holidayDurationDays
             }
     }
+
 
 
 type HolidayResponseWrapper =
@@ -111,9 +116,16 @@ module Holiday =
 
         Array.map mapper
 
-
-    let parseResponseBody =
-        Json.parse >> Json.deserialize >> (fun x -> x.Result) >> mapToAbsences >> foldIntoSingleResult
+    let parseResponseBody (logger:Logger) json =
+        try 
+            Json.parse json
+            |> Json.deserialize 
+            |> (fun x -> x.Result) 
+            |> mapToAbsences 
+            |> foldIntoSingleResult
+        with exn ->
+            sprintf "%s%s" (exn.ToString()) json |> logger
+            exn.ToString() |> Error
 
 
 type SickResponse =
@@ -221,9 +233,17 @@ module Sick =
             | Result.Error message -> Result.Error message
 
         Array.map mapper
-
-    let parseResponseBody =
-        Json.parse >> Json.deserialize >> (fun x -> x.Result) >> mapToAbsences >> foldIntoSingleResult
+        
+    let parseResponseBody logger json =
+        try 
+            Json.parse json
+            |> Json.deserialize 
+            |> (fun x -> x.Result) 
+            |> mapToAbsences 
+            |> foldIntoSingleResult
+        with exn -> 
+            sprintf "%s%s" (exn.ToString()) json |> logger
+            exn.ToString() |> Error
 
 
 type OtherEventsStartTime =
@@ -375,16 +395,18 @@ module OtherEvent =
     let private filterUnknownKinds : (Result<Absence list, string> -> Result<Absence list, string>) =
         Result.map (List.filter (fun a -> match a.kind with | UnknownKind -> false | _ -> true))
 
-
-    let parseResponseBody =
-        Json.parse
-        >> Json.deserialize
-        >> (fun x -> x.Result)
-        >> mapToAbsences
-        >> foldIntoSingleResult 
-        >> filterUnknownDurations
-        >> filterUnknownKinds
-
+    let parseResponseBody logger json =
+        try 
+            Json.parse json
+            |> Json.deserialize 
+            |> (fun x -> x.Result) 
+            |> mapToAbsences 
+            |> foldIntoSingleResult
+            |> filterUnknownDurations
+            |> filterUnknownKinds
+        with exn -> 
+            sprintf "%s%s" (exn.ToString()) json |> logger
+            exn.ToString() |> Error
 
 module Http =
 
@@ -400,30 +422,23 @@ module Http =
         queryRequestBody queryName >> postJson "https://api.peoplehr.net/Query"
 
 
-    let private getEmployeesWithHolidayToday =
-        query "Employees on holiday today" >> Result.bind Holiday.parseResponseBody
+    let private getEmployeesWithHolidayToday logger =
+        query "Employees on holiday today" >> Result.bind (Holiday.parseResponseBody logger)
 
 
-    let private getEmployeesWithSickToday =
-        query "Employees absent/sick today" >> Result.bind Sick.parseResponseBody
+    let private getEmployeesWithSickToday logger =
+        query "Employees absent/sick today" >> Result.bind (Sick.parseResponseBody logger)
 
 
-    let private getEmployeesWithOtherEventToday =
-        query "Employees with other events today" >> Result.bind OtherEvent.parseResponseBody
+    let private getEmployeesWithOtherEventToday logger =
+        query "Employees with other events today" >> Result.bind (OtherEvent.parseResponseBody logger)
 
+    let getAbsences (logger:Logger) apiKey =
+        results {
+            let! holidays = getEmployeesWithHolidayToday logger apiKey
+            let! sicks = getEmployeesWithSickToday logger apiKey
+            let! otherEvents = getEmployeesWithOtherEventToday logger apiKey    
 
-    let getAbsences apiKey =
-        let holidaysR = getEmployeesWithHolidayToday apiKey
-        let sicksR = getEmployeesWithSickToday apiKey
-        let otherR = getEmployeesWithOtherEventToday apiKey
-
-        match holidaysR with
-        | Result.Error message -> Result.Error message
-        | Ok holidays ->
-            match sicksR with
-            | Result.Error message -> Result.Error message
-            | Ok sicks ->
-                match otherR with
-                | Result.Error message -> Result.Error message
-                | Ok others ->
-                    Ok (List.concat [ holidays; sicks; others ])
+            return
+                holidays @ sicks @ otherEvents
+        }

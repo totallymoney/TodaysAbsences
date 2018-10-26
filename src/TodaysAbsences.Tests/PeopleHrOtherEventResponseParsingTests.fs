@@ -9,6 +9,8 @@ open PeopleHrApi
 
 [<Tests>]
 let tests =
+    let otherEventParser = OtherEvent.parseResponseBody ignore
+    
     testList "People HR API Other Event Response parsing" [
 
         test "Parses a one day appointment" {
@@ -38,7 +40,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (OtherEvent.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (otherEventParser json)
         }
 
         test "Parses a morning Study Leave" {
@@ -68,7 +70,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a morning study leave (AM)" (OtherEvent.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a morning study leave (AM)" (otherEventParser json)
         }
 
         test "Parses a afternoon compassionate leave" {
@@ -98,7 +100,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a morning compassionate leave (AM)" (OtherEvent.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a morning compassionate leave (AM)" (otherEventParser json)
         }
 
         test "Parses a two day training" {
@@ -126,7 +128,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a two day training absence" (OtherEvent.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a two day training absence" (otherEventParser json)
         }
 
         test "Parses a three day working from home" {
@@ -154,7 +156,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a three day training absence" (OtherEvent.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a three day training absence" (otherEventParser json)
         }
 
         test "Ignores event with null \"Other Events Reason\"" {
@@ -175,7 +177,7 @@ let tests =
                 ]
             }"""
 
-            expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
+            expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (otherEventParser json)
         }
 
         test "Ignores event with null \"Other Events Duration Type\"" {
@@ -196,7 +198,7 @@ let tests =
                 ]
             }"""
 
-            expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (OtherEvent.parseResponseBody json)
+            expectAbsences [] "Expected the JSON to be parsed, and the event with invalid data to be ignored" (otherEventParser json)
         }
 
         test "Parses empty/\"No records found\" response in to empty collection" {
@@ -208,6 +210,6 @@ let tests =
                     "Result":""
                 }"""
             
-            expectAbsences [] "Expected a empty collection of absences" (OtherEvent.parseResponseBody json)
+            expectAbsences [] "Expected a empty collection of absences" (otherEventParser json)
         }
     ]

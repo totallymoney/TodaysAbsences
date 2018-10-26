@@ -35,3 +35,5 @@ type Absence = {
     duration : Duration
     employee : Employee
 }
+
+type Logger = (string -> unit)
