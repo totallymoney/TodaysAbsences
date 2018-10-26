@@ -10,6 +10,8 @@ open PeopleHrApi
 
 [<Tests>]
 let tests =
+    let sickParser = Sick.parseResponseBody ignore
+    
     testList "People HR API Sick Response parsing" [
         test "Parses a single day sickness" {
             let json = """
@@ -35,7 +37,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (Sick.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (sickParser json)
         }
 
         test "Parses a morning sickness" {
@@ -62,7 +64,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a morning absence" (Sick.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a morning absence" (sickParser json)
         }
 
         test "Parses a afternoon sickness" {
@@ -89,7 +91,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a afternoon absence" (Sick.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a afternoon absence" (sickParser json)
         }
 
         test "Errors because of unexpected \"Sick (AM/PM)\" value" {
@@ -109,7 +111,7 @@ let tests =
                 ]
             }"""
 
-            Expect.isError (Sick.parseResponseBody json) "Expected \"foobar\" to cause an error when determining the sick duration"
+            Expect.isError (sickParser json) "Expected \"foobar\" to cause an error when determining the sick duration"
         }
 
         test "Parses empty/\"No records found\" response in to empty collection" {
@@ -121,6 +123,6 @@ let tests =
                     "Result":""
                 }"""
             
-            expectAbsences [] "Expected a empty collection of absences" (Sick.parseResponseBody json)
+            expectAbsences [] "Expected a empty collection of absences" (sickParser json)
         }
     ]

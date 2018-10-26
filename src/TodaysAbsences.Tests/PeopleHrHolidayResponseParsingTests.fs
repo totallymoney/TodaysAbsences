@@ -9,6 +9,8 @@ open PeopleHrApi
 
 [<Tests>]
 let tests =
+    let holidayParser = Holiday.parseResponseBody ignore
+    
     testList "People HR API Holiday Response parsing" [
 
         test "Parses a 1 day holiday" {
@@ -35,7 +37,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (Holiday.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a 1 day absence" (holidayParser json)
         }
 
         test "Parses afternoon holiday" {
@@ -62,7 +64,7 @@ let tests =
                 }
             ]
             
-            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (Holiday.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (holidayParser json)
         }
 
         test "Parses morning holiday" {
@@ -89,7 +91,7 @@ let tests =
                 }
             ]
             
-            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (Holiday.parseResponseBody json)
+            expectAbsences expected "Expected the JSON to be parsed in to a afternoon holiday (PM)" (holidayParser json)
         }
 
         test "Parses a multi-day holiday" {
@@ -116,7 +118,7 @@ let tests =
                 }
             ]
 
-            expectAbsences expected "Expected the single multi-day holiday to be parsed" (Holiday.parseResponseBody json)
+            expectAbsences expected "Expected the single multi-day holiday to be parsed" (holidayParser json)
         }
 
         test "Errors because of unexpected \"Part of the Day\" value" {
@@ -136,7 +138,7 @@ let tests =
                 ]
             }"""
 
-            Expect.isError (Holiday.parseResponseBody json) "Expected \"the spanish inquisition\" to cause can error when determining holiday duration"
+            Expect.isError (holidayParser json) "Expected \"the spanish inquisition\" to cause can error when determining holiday duration"
         }
 
         test "Parses empty/\"No records found\" response in to empty collection" {
@@ -148,6 +150,6 @@ let tests =
                     "Result":""
                 }"""
             
-            expectAbsences [] "Expected a empty collection of absences" (Holiday.parseResponseBody json)
+            expectAbsences [] "Expected a empty collection of absences" (holidayParser json)
         }
     ]
