@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences", "src\TodaysAbsences\TodaysAbsences.fsproj", "{66F29A9F-D169-45E4-AD50-F13DD8DED276}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences.Lambda", "src\TodaysAbsences.Lambda\TodaysAbsences.Lambda.fsproj", "{02CD06A4-BAFF-4B5C-912F-27940D7DFEC0}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences.Tests", "src\TodaysAbsences.Tests\TodaysAbsences.Tests.fsproj", "{77B375A3-39B5-469D-9090-510514D70946}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66F29A9F-D169-45E4-AD50-F13DD8DED276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66F29A9F-D169-45E4-AD50-F13DD8DED276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66F29A9F-D169-45E4-AD50-F13DD8DED276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66F29A9F-D169-45E4-AD50-F13DD8DED276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02CD06A4-BAFF-4B5C-912F-27940D7DFEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02CD06A4-BAFF-4B5C-912F-27940D7DFEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02CD06A4-BAFF-4B5C-912F-27940D7DFEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02CD06A4-BAFF-4B5C-912F-27940D7DFEC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77B375A3-39B5-469D-9090-510514D70946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77B375A3-39B5-469D-9090-510514D70946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77B375A3-39B5-469D-9090-510514D70946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77B375A3-39B5-469D-9090-510514D70946}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
