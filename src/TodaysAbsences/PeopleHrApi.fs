@@ -18,6 +18,9 @@ let private foldIntoSingleResult results =
 
     Array.fold folder (Ok []) results
 
+let logObj logger objectToLog = 
+    sprintf "%A" objectToLog |> logger
+    objectToLog
 
 type HolidayResponse =
     {
@@ -123,6 +126,7 @@ module Holiday =
             |> (fun x -> x.Result) 
             |> mapToAbsences 
             |> foldIntoSingleResult
+            |> logObj logger
         with exn ->
             sprintf "%s%s" (exn.ToString()) json |> logger
             exn.ToString() |> Error
@@ -241,6 +245,7 @@ module Sick =
             |> (fun x -> x.Result) 
             |> mapToAbsences 
             |> foldIntoSingleResult
+            |> logObj logger
         with exn -> 
             sprintf "%s%s" (exn.ToString()) json |> logger
             exn.ToString() |> Error
@@ -404,6 +409,7 @@ module OtherEvent =
             |> foldIntoSingleResult
             |> filterUnknownDurations
             |> filterUnknownKinds
+            |> logObj logger
         with exn -> 
             sprintf "%s%s" (exn.ToString()) json |> logger
             exn.ToString() |> Error

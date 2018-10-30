@@ -14,7 +14,9 @@
     <Compile Include="PeopleHrHolidayResponseParsingTests.fs" />
     <Compile Include="PeopleHrSickResponseParsingTests.fs" />
     <Compile Include="PeopleHrOtherEventResponseParsingTests.fs" />
+    <Compile Include="RemoveAccentsTests.fs" />
     <Compile Include="SlackMessageBuildingTests.fs" />
+    <Compile Include="SpecialCharacterSerializationTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

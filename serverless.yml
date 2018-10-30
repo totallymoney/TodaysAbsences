@@ -1,18 +1,29 @@
-service: TodaysAbsences
+service: serverless-TodaysAbsences
 
 provider:
   name: aws
   runtime: dotnetcore2.0
-  stage: production
+  stage: ${opt:stage, 'stage'}
   region: eu-west-1
+  timeout: 60 #sec
+  memorySize: 128 #MB
 
- environment:
-   PEOPLEHR_API_KEY: ${env:PEOPLEHR_API_KEY}
-   SLACK_WEBHOOK_URL: ${env:SLACK_WEBHOOK_URL}
+  environment:
+    PEOPLEHR_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/PEOPLEHR_API_KEY}
+    SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
+
+  # A role is going to be created and assigned to the service with the format - [serviceName]-[stage]-[region]-lambdaRole
+  iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - "logs:CreateLogGroup"
+      - "logs:CreateLogStream"
+      - "logs:PutLogEvents"
+    Resource: "*"
 
 # you can add packaging information here
 package:
-  artifact: bin/release/netcoreapp2.0/deploy-package.zip
+  artifact: ./publish/deploy-package.zip
 
 functions:
   TodaysAbsences-Function:
