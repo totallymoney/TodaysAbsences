@@ -18,6 +18,9 @@ let private foldIntoSingleResult results =
 
     Array.fold folder (Ok []) results
 
+let logObj logger objectToLog = 
+    sprintf "%A" objectToLog |> logger
+    objectToLog
 
 type HolidayResponse =
     {
@@ -118,18 +121,12 @@ module Holiday =
 
     let parseResponseBody (logger:Logger) json =
         try 
-            let deb = 
-                Json.parse json
-                |> Json.deserialize 
-                |> (fun x -> x.Result) 
-                |> mapToAbsences 
-                |> foldIntoSingleResult
-                
-            deb
-            |> sprintf "%A" 
-            |> logger 
-            
-            deb
+            Json.parse json
+            |> Json.deserialize 
+            |> (fun x -> x.Result) 
+            |> mapToAbsences 
+            |> foldIntoSingleResult
+            |> logObj logger
         with exn ->
             sprintf "%s%s" (exn.ToString()) json |> logger
             exn.ToString() |> Error
@@ -243,17 +240,12 @@ module Sick =
         
     let parseResponseBody logger json =
         try 
-            let deb =
-                Json.parse json
-                |> Json.deserialize 
-                |> (fun x -> x.Result) 
-                |> mapToAbsences 
-                |> foldIntoSingleResult
-            deb
-            |> sprintf "%A" 
-            |> logger 
-                         
-            deb
+            Json.parse json
+            |> Json.deserialize 
+            |> (fun x -> x.Result) 
+            |> mapToAbsences 
+            |> foldIntoSingleResult
+            |> logObj logger
         with exn -> 
             sprintf "%s%s" (exn.ToString()) json |> logger
             exn.ToString() |> Error
@@ -410,19 +402,14 @@ module OtherEvent =
 
     let parseResponseBody logger json =
         try 
-            let deb = 
-                Json.parse json
-                |> Json.deserialize 
-                |> (fun x -> x.Result) 
-                |> mapToAbsences 
-                |> foldIntoSingleResult
-                |> filterUnknownDurations
-                |> filterUnknownKinds
-            deb
-            |> sprintf "%A" 
-            |> logger 
-                         
-            deb
+            Json.parse json
+            |> Json.deserialize 
+            |> (fun x -> x.Result) 
+            |> mapToAbsences 
+            |> foldIntoSingleResult
+            |> filterUnknownDurations
+            |> filterUnknownKinds
+            |> logObj logger
         with exn -> 
             sprintf "%s%s" (exn.ToString()) json |> logger
             exn.ToString() |> Error
