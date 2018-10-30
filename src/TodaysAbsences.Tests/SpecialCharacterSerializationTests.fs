@@ -32,6 +32,6 @@ let tests =
     [
         testCase "Remove accents from first and last names " <| fun _ -> 
             assertEmployeeWithSpecialName "à" "a"
-            assertEmployeeWithSpecialName "à" "a"  
+            assertEmployeeWithSpecialName "é" "e"  
     ] 
     |> testList "Serialize special characteres in names without accents"
