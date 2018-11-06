@@ -6,4 +6,5 @@ paket-files/
 node_modules/
 .idea
 .serverless
+.ionide
 publish
