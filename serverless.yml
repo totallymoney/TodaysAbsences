@@ -29,4 +29,4 @@ functions:
   TodaysAbsences-Function:
     handler: TodaysAbsences.Lambda::Handler::handler
     events:
-      - schedule: cron(0 9 * * ? *)
+      - schedule: cron(0 9 * * 1-5)
