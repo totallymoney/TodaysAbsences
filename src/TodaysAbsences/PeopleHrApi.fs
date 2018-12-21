@@ -371,27 +371,23 @@ module OtherEvent =
         match r.OtherEventsReason with
         | Some reason ->
             match reason with
-            | "Appointment" -> Ok Appointment
-            | "Compassionate" -> Ok Compassionate
-            | "Study Leave" -> Ok StudyLeave
-            | "Training" -> Ok Training
-            | "Working from Home" -> Ok Wfh
-            | _ -> Ok UnknownKind
+            | "Appointment" -> Appointment
+            | "Compassionate" -> Compassionate
+            | "Study Leave" -> StudyLeave
+            | "Training" -> Training
+            | "Working from Home" -> Wfh
+            | "Volunteering" -> Volunteering
+            | _ -> UnknownKind
         | None ->
-            Ok UnknownKind
-
+            UnknownKind
 
     let private mapToAbsences =
         let mapper (r:OtherEventResponse) =
             match duration r with
-            | Ok d ->
-                match kind r with
-                | Ok k -> Ok { employee = employee r; kind = k; duration = d }
-                | Result.Error message -> Result.Error message
+            | Ok d -> r |> kind |> fun k -> Ok { employee = employee r; kind = k; duration = d }
             | Result.Error message -> Result.Error message
         
         Array.map mapper
-
 
     let private filterUnknownDurations =
         Result.map (List.filter (fun a -> match a.duration with | UnknownDuration -> false | _ -> true))
