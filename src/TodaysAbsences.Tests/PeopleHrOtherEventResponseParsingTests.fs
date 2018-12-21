@@ -212,4 +212,34 @@ let tests =
             
             expectAbsences [] "Expected a empty collection of absences" (otherEventParser json)
         }
+
+        test "Parses volunteering" {
+            let json = """
+            {
+                "isError": false,
+                "Message":"The requested processed successfully.",
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": "Volunteering",
+                        "Other Events Start Date": "2018/12/21",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 1.00
+                    }
+                ]
+            }"""
+            
+            let expected = [
+                {
+                    employee = { firstName = "Martin"; lastName = "Heidigger"; department = "Development" }
+                    kind = Volunteering
+                    duration = Days 1m
+                }
+            ]
+
+            expectAbsences expected "Volunteering event should be parsed" (otherEventParser json)
+        }
     ]
