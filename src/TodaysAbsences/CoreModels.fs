@@ -11,6 +11,8 @@ type KindOfAbsense =
     | Training
     | Wfh
     | Volunteering
+    | Conference
+    | JuryDuty
     | UnknownKind
     
     override x.ToString() = 
@@ -23,6 +25,8 @@ type KindOfAbsense =
             | Training -> "Training"
             | Wfh -> "Working from Home"
             | Volunteering -> "Volunteering"
+            | Conference -> "Conference"
+            | JuryDuty -> "Jury Duty"
             | UnknownKind -> "Unknown reason"
 
 
