@@ -242,4 +242,64 @@ let tests =
 
             expectAbsences expected "Volunteering event should be parsed" (otherEventParser json)
         }
+
+        test "Parses conference event type" {
+            let json = """
+            {
+                "isError": false,
+                "Message":"The requested processed successfully.",
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": "Conference",
+                        "Other Events Start Date": "2018/12/21",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 1.00
+                    }
+                ]
+            }"""
+            
+            let expected = [
+                {
+                    employee = { firstName = "Martin"; lastName = "Heidigger"; department = "Development" }
+                    kind = Conference
+                    duration = Days 1m
+                }
+            ]
+
+            expectAbsences expected "Conference event should be parsed" (otherEventParser json)
+        }
+
+        test "Parses JuryDuty event type" {
+            let json = """
+            {
+                "isError": false,
+                "Message":"The requested processed successfully.",
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": "Jury Duty",
+                        "Other Events Start Date": "2018/12/21",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 1.00
+                    }
+                ]
+            }"""
+            
+            let expected = [
+                {
+                    employee = { firstName = "Martin"; lastName = "Heidigger"; department = "Development" }
+                    kind = JuryDuty
+                    duration = Days 1m
+                }
+            ]
+
+            expectAbsences expected "JuryDuty event should be parsed" (otherEventParser json)
+        }
     ]

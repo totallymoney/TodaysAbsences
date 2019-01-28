@@ -377,6 +377,8 @@ module OtherEvent =
             | "Training" -> Training
             | "Working from Home" -> Wfh
             | "Volunteering" -> Volunteering
+            | "Conference" -> Conference
+            | "Jury Duty" -> JuryDuty
             | _ -> UnknownKind
         | None ->
             UnknownKind
