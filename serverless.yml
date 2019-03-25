@@ -2,7 +2,7 @@ service: serverless-TodaysAbsences
 
 provider:
   name: aws
-  runtime: dotnetcore2.0
+  runtime: dotnetcore2.1
   stage: ${opt:stage, 'stage'}
   region: eu-west-1
   timeout: 60 #sec
