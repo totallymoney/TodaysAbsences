@@ -1,0 +1,101 @@
+module Mapper
+
+open System
+open System.Globalization
+open CoreModels
+open CoreModels.PeopleHrApiDto
+open Core
+
+let parseDateTimeString str = DateTime.ParseExact(str, "yyyy/MM/dd", CultureInfo.InvariantCulture)
+
+module Holiday = 
+    open CoreModels.PeopleHrModels.Shared
+    open CoreModels.PeopleHrModels.HolidayDomainTypes
+
+    let tryMapHolidayDto (holidayDto : HolidayResponseDto) = 
+        let employee = 
+            { EmployeeId = holidayDto.EmployeeId
+              FirstName = holidayDto.FirstName
+              LastName = holidayDto.LastName
+              Department = holidayDto.Department }
+
+        let tryMapHolidayStatus = function
+            | "Approved" -> Approved |> Ok
+            | "Submitted" -> Submitted |> Ok 
+            | "Rejected" -> Rejected |> Ok
+            | s -> sprintf "Unknown holiday status %s" s |> HolidayMappingError |> Error
+
+        let tryMapPartOfDay = function
+            | Some "AM" -> Am |> Some
+            | Some "PM" -> Pm |> Some
+            | _ -> None
+
+        let holidayTimeWindow = 
+            { StartDate = holidayDto.HolidayStart |> parseDateTimeString
+              EndDate = holidayDto.HolidayEnd |> parseDateTimeString
+              Duration = holidayDto.HolidayDurationDays }
+  
+        let mapHolidayIntervalType = 
+            match holidayDto.PartOfTheDay |> tryMapPartOfDay with
+            | Some partOfDay -> 
+                (partOfDay, holidayTimeWindow) |> Hours
+            | None -> 
+                holidayTimeWindow |> Days
+            
+
+        result {
+            let! holidayStatus = holidayDto.Status |> tryMapHolidayStatus
+            let holidayIntervalType = mapHolidayIntervalType
+
+            return 
+                { Employee = employee
+                  HolidayIntervalType = holidayIntervalType
+                  Status = holidayStatus }
+        }
+        
+
+module OtherEvents = 
+    open CoreModels.PeopleHrModels.Shared
+    open CoreModels.PeopleHrModels.OtherEventDomainTypes
+
+    let getReasonType = function    
+        | "Appointment" -> Appointment
+        | "Compassionate" -> Compassionate
+        | "Study Leave" -> StudyLeave
+        | "Training" -> Training
+        | "Working from Home" -> Wfh
+        | "Volunteering" -> Volunteering
+        | "Conference" -> Conference
+        | "Jury Duty" -> JuryDuty
+        | _ -> UnknownReason
+
+    let hoursToPartDay = function
+        | Some hour -> 
+            if hour <= 12 then Some (LessThanADay Am)
+            else Some (LessThanADay Pm) 
+        | None -> None
+
+    let mapOtherEventsDtoToModel (otherEventsDto : OtherEventResponseDto) = 
+        let employee = 
+            { EmployeeId = otherEventsDto.EmployeeId
+              FirstName = otherEventsDto.FirstName
+              LastName = otherEventsDto.LastName
+              Department = otherEventsDto.Department }
+            
+        let timeWindow = 
+            let durationType = 
+                match otherEventsDto.OtherEventsDurationType with
+                | "Days" ->
+                    otherEventsDto.OtherEventsTotalDurationDays |> Days
+                | "Hours" -> 
+                    match otherEventsDto.OtherEventsStartTime with
+                    | Some startTime -> startTime.Hours |> Some |> Hours
+                    | None -> None |> Hours
+                | s -> failwith (sprintf "Unknown duration type %s" s)
+
+            { DurationType = durationType
+              StartDate = otherEventsDto.StartDate |> parseDateTimeString }
+        
+        { Employee = employee
+          Reason = otherEventsDto.OtherEventsReason |> getReasonType
+          TimeWindow = timeWindow }

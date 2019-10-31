@@ -30,12 +30,12 @@ let tests =
             test "1 department" {
                 let absences = [
                     {
-                        employee = { firstName = "Joe"; lastName = "Bloggs"; department = "Development" }
+                        employee = Employee.create "id" "Joe" "Bloggs" "Development"
                         kind = Holiday
                         duration = Days 4m
                     }
                     {
-                        employee = { firstName = "John"; lastName = "Smith"; department = "Development" }
+                        employee = Employee.create "id" "John" "Smith" "Development"
                         kind = Wfh
                         duration = Days 1m
                     }
@@ -54,12 +54,12 @@ let tests =
             test "2 departments" {
                 let absences = [
                     {
-                        employee = { firstName = "Steve"; lastName = "Wozniak"; department = "Development" }
+                        employee = Employee.create "id" "Steve" "Wozniak" "Development"
                         kind = Appointment
                         duration = LessThanADay Am
                     }
                     {
-                        employee = { firstName = "Steve"; lastName = "Jobs"; department = "Marketing" }
+                        employee = Employee.create "id" "Steve" "Jobs" "Marketing"
                         kind = Training
                         duration = Days 2m
                     }
@@ -82,22 +82,22 @@ let tests =
             test "Fields are sorted by department name" {
                 let absences = [
                     {
-                        employee = { firstName = "Julius"; lastName = "Caesar"; department = "Department D" }
+                        employee = Employee.create "id" "Julius" "Caesar" "Department D"
                         kind = Training
                         duration = Days 2m
                     }
                     {
-                        employee = { firstName = "Dead"; lastName = "Mau5"; department = "Department C" }
+                        employee = Employee.create "id" "Dead" "Mau5" "Department C"
                         kind = Training
                         duration = Days 2m
                     }
                     {
-                        employee = { firstName = "Mark"; lastName = "Antony"; department = "Department A" }
+                        employee = Employee.create "id" "Mark" "Antony" "Department A"
                         kind = Training
                         duration = Days 2m
                     }
                     {
-                        employee = { firstName = "James"; lastName = "Bond"; department = "Department B" }
+                        employee = Employee.create "id" "James" "Bond" "Department B"
                         kind = Training
                         duration = Days 2m
                     }
@@ -124,33 +124,32 @@ let tests =
 
                 Expect.equal (messageJson absences) expected "Expected a single attachment with a field for each department, sorted alphabetically"
             }
-
         ]
 
         test "Creates a single attachment with base content and employees sorted by first name within departments" {
             let absences = [
                 {
-                    employee = { firstName = "Alice"; lastName = "of Wonderland"; department = "Sales" }
+                    employee = Employee.create "id" "Alice" "of Wonderland" "Sales"
                     kind = Appointment
                     duration = Days 1m
                 }
                 {
-                    employee = { firstName = "Trevor"; lastName = "McTest"; department = "Design" }
+                    employee = Employee.create "id" "Trevor" "McTest" "Design"
                     kind = Holiday
                     duration = Days 1m
                 }
                 {
-                    employee = { firstName = "Edward"; lastName = "Sheeran"; department = "Design" }
+                    employee = Employee.create "id" "Edward" "Sheeran" "Design"
                     kind = Holiday
                     duration = Days 1m
                 }
                 {
-                    employee = { firstName = "Charles"; lastName = "Chaplin"; department = "Sales" }
+                    employee = Employee.create "id" "Charles" "Chaplin" "Sales"
                     kind = Appointment
                     duration = Days 1m
                 }
                 {
-                    employee = { firstName = "Bob"; lastName = "Feynman"; department = "Sales" }
+                    employee = Employee.create "id" "Bob" "Feynman" "Sales"
                     kind = Appointment
                     duration = Days 1m
                 }

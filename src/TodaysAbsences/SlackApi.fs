@@ -1,66 +1,56 @@
 module SlackApi
 
-
 open CoreModels
 open Chiron
 open Http
 
-
 type AttachmentField =
-    {
-        title : string
-        value : string
+    { Title : string
+      Value : string }
+
+    static member ToJson (af : AttachmentField) = json {
+        do! Json.write "title" af.Title
+        do! Json.write "value" af.Value
     }
 
-    static member ToJson (f:AttachmentField) = json {
-        do! Json.write "title" f.title
-        do! Json.write "value" f.value
-    }
+type Attachment = 
+    { Fallback : string
+      Color : string
+      Pretext : string
+      Text : string
+      Fields : AttachmentField list }
 
-
-type Attachment =
-    {
-        fallback : string
-        color : string
-        pretext : string
-        text : string
-        fields : AttachmentField list
-    }
-
-    static member ToJson (a:Attachment) = json {
-        do! Json.write "fallback" a.fallback
-        do! Json.write "color" a.color
-        do! Json.write "pretext" a.pretext
-        do! Json.write "text" a.text
-        do! Json.write "fields" a.fields
+    static member ToJson (a : Attachment) = json {
+        do! Json.write "fallback" a.Fallback
+        do! Json.write "color" a.Color
+        do! Json.write "pretext" a.Pretext
+        do! Json.write "text" a.Text
+        do! Json.write "fields" a.Fields
     }
 
 type Message =
-    {
-        attachments : Attachment list
-    }
+    { Attachments : Attachment list }
 
-    static member ToJson (m:Message) = json {
-        do! Json.write "attachments" m.attachments
+    static member ToJson (m : Message) = json {
+        do! Json.write "attachments" m.Attachments
     }
 
 let private baseAttachment = {
-    fallback = "Today's absences and holidays, from PeopleHR"
-    color = "#34495e"
-    pretext = "Today's Absences and Holidays, from <https://totallymoney.peoplehr.net|PeopleHR>"
-    text = "Sorted by Department, then by first name within departments"
-    fields = []
+    Fallback = "Today's absences and holidays, from PeopleHR"
+    Color = "#34495e"
+    Pretext = "Today's Absences and Holidays, from <https://totallymoney.peoplehr.net|PeopleHR>"
+    Text = "Sorted by Department, then by first name within departments"
+    Fields = []
 }
 
 let private absenceStrings =
-    List.sortBy (fun a -> a.employee.firstName) 
+    List.sortBy (fun abs -> abs.employee.firstName) 
     >> List.map (fun abs -> abs.ToString()) 
     >> String.concat "\n"
 
-let private departmentField (department, absences) = {
-    title = department
-    value = absenceStrings absences
-}
+let private departmentField (department, absences) = 
+    { Title = department
+      Value = absenceStrings absences }
 
 let private fields =
     List.groupBy (fun a -> a.employee.department) 
@@ -68,7 +58,7 @@ let private fields =
     >> List.map departmentField
 
 let messageJson absences = 
-    { attachments = [{ baseAttachment with fields = fields absences }]}
+    { Attachments = [{ baseAttachment with Fields = fields absences }]}
 
 let messageJsonString (message:Message) =
     Json.serialize message |> Json.format

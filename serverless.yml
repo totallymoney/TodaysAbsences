@@ -1,4 +1,4 @@
-service: serverless-TodaysAbsences
+service: serverless-TM-Absences
 
 provider:
   name: aws
@@ -6,11 +6,11 @@ provider:
   stage: ${opt:stage, 'stage'}
   region: eu-west-1
   timeout: 60 #sec
-  memorySize: 128 #MB
+  memorySize: 512 #MB
 
-  environment:
-    PEOPLEHR_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/PEOPLEHR_API_KEY}
-    SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
+  # environment:
+  #   PEOPLEHR_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/PEOPLEHR_API_KEY}
+  #   SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
 
   # A role is going to be created and assigned to the service with the format - [serviceName]-[stage]-[region]-lambdaRole
   iamRoleStatements:
@@ -26,7 +26,20 @@ package:
   artifact: ./publish/deploy-package.zip
 
 functions:
-  TodaysAbsences-Function:
+  TodaysAbsences:
     handler: TodaysAbsences.Lambda::Handler::handler
     events:
-      - schedule: cron(0 9 ? * MON-FRI *)
+      - schedule: cron(0 8 ? * MON-FRI *)
+    environment:
+      PEOPLEHR_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/PEOPLEHR_API_KEY}
+      SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
+  
+  WeeklyAbsences:
+    handler: TodaysAbsences.Lambda::Handler::weeklyAbsencesHandler
+    events:
+      - schedule: cron(0 8 ? * MON-FRI *)
+
+    #TODO: use anchors
+    environment:
+      PEOPLEHR_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/PEOPLEHR_API_KEY}
+      SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}

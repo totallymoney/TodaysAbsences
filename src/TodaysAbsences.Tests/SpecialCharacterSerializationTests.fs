@@ -7,11 +7,7 @@ open Helpers
 open Newtonsoft.Json.Linq
 
 let assertEmployeeWithSpecialName nameWithAccent expected = 
-    let emp = {
-        firstName = nameWithAccent
-        lastName = nameWithAccent;
-        department = "Fun"
-    }
+    let emp = Employee.create "id" nameWithAccent nameWithAccent "Fun"
                 
     let absence = {
         kind = Holiday

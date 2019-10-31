@@ -9,10 +9,14 @@
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="Core.fs" />
+    <Compile Include="Infrastructure.fs" />
     <Compile Include="CoreModels.fs" />
+    <Compile Include="Mapper.fs" />
     <Compile Include="Http.fs" />
+    <Compile Include="MarkdownTable.fs" />
     <Compile Include="PeopleHrApi.fs" />
     <Compile Include="SlackApi.fs" />
+    <Compile Include="Domain.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

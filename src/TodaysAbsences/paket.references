@@ -1,2 +1,4 @@
 Chiron
 FSharp.Data
+Newtonsoft.Json
+Microsoft.FSharpLu.Json

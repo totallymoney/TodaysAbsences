@@ -25,13 +25,15 @@ let tests =
                         "Last Name": "Dewhurst",
                         "Department": "Development",
                         "Sick (AM/PM)": null,
-                        "Sick Duration (Days)": 1
+                        "Sick Duration (Days)": 1,
+                        "Sick Start Date": "2019/09/02",
+			            "Sick End Date": "2019/09/02"
                     }
                 ]
             }"""
             let expected = [
                 {
-                    employee = { firstName = "Edward"; lastName = "Dewhurst"; department = "Development" }
+                    employee = Employee.create "E1" "Edward" "Dewhurst" "Development"
                     kind = Sick
                     duration = Days 1m
                 }
@@ -52,13 +54,15 @@ let tests =
                         "Last Name": "Fudd",
                         "Department": "Wabbit Hunting",
                         "Sick (AM/PM)": "AM",
-                        "Sick Duration (Days)": null
+                        "Sick Duration (Days)": null,
+                        "Sick Start Date": "2019/09/02",
+			            "Sick End Date": "2019/09/02"
                     }
                 ]
             }"""
             let expected = [
                 {
-                    employee = { firstName = "Elmer"; lastName = "Fudd"; department = "Wabbit Hunting" }
+                    employee = Employee.create "E2" "Elmer" "Fudd" "Wabbit Hunting"
                     kind = Sick
                     duration = LessThanADay Am
                 }
@@ -79,13 +83,15 @@ let tests =
                         "Last Name": "Leghorn",
                         "Department": "I said",
                         "Sick (AM/PM)": "PM",
-                        "Sick Duration (Days)": null
+                        "Sick Duration (Days)": null,
+                        "Sick Start Date": "2019/09/02",
+			            "Sick End Date": "2019/09/02"
                     }
                 ]
             }"""
             let expected = [
                 {
-                    employee = { firstName = "Foghorn"; lastName = "Leghorn"; department = "I said" }
+                    employee = Employee.create "E2" "Foghorn" "Leghorn" "I said"
                     kind = Sick
                     duration = LessThanADay Pm
                 }
@@ -106,7 +112,9 @@ let tests =
                         "Last Name": "Leghorn",
                         "Department": "I said",
                         "Sick (AM/PM)": "foobar",
-                        "Sick Duration (Days)": null
+                        "Sick Duration (Days)": null,
+                        "Sick Start Date": "2019/09/02",
+			            "Sick End Date": "2019/09/02"
                     }
                 ]
             }"""

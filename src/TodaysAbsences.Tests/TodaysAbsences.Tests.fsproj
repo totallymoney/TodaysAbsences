@@ -11,7 +11,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
-    <Compile Include="PeopleHrHolidayResponseParsingTests.fs" />
+    <Compile Include="CoreTests.fs" />
+    <Compile Include="PeopleHrHolidayTests.fs" />
     <Compile Include="PeopleHrSickResponseParsingTests.fs" />
     <Compile Include="PeopleHrOtherEventResponseParsingTests.fs" />
     <Compile Include="RemoveAccentsTests.fs" />

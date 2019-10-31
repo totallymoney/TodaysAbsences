@@ -6,5 +6,6 @@ nuget Expecto
 nuget FSharp.Core
 nuget FSharp.Data
 nuget Amazon.Lambda.Serialization.Json
+nuget Microsoft.FSharpLu.Json
 nuget Microsoft.NET.Test.Sdk
 clitool Amazon.Lambda.Tools
