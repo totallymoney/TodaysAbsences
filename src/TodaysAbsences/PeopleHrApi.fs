@@ -379,6 +379,8 @@ module OtherEvent =
             | "Volunteering" -> Volunteering
             | "Conference" -> Conference
             | "Jury Duty" -> JuryDuty
+            | "Remote" -> Remote
+            | "On Site" -> OnSite
             | _ -> UnknownKind
         | None ->
             UnknownKind
