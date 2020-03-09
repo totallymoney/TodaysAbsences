@@ -11,6 +11,8 @@ type KindOfAbsense =
     | Training
     | Wfh
     | Volunteering
+    | Remote
+    | OnSite
     | Conference
     | JuryDuty
     | UnknownKind
@@ -27,6 +29,8 @@ type KindOfAbsense =
             | Volunteering -> "Volunteering"
             | Conference -> "Conference"
             | JuryDuty -> "Jury Duty"
+            | Remote -> "Remote"
+            | OnSite -> "On Site"
             | UnknownKind -> "Unknown reason"
 
 
