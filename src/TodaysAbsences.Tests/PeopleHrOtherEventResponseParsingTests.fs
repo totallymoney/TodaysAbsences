@@ -362,4 +362,34 @@ let tests =
 
             expectAbsences expected "OnSite event should be parsed" (otherEventParser json)
         }
+
+        test "Parses Amber event type" {
+            let json = """
+            {
+                "isError": false,
+                "Message":"The requested processed successfully.",
+                "Result": [
+                    {
+                        "First Name": "Martin",
+                        "Last Name": "Heidigger",
+                        "Department": "Development",
+                        "Other Events Duration Type": "Days",
+                        "Other Events Reason": "Amber",
+                        "Other Events Start Date": "2018/12/21",
+                        "Other Events Start Time": null,
+                        "Other Events Total Duration (Days)": 1.00
+                    }
+                ]
+            }"""
+
+            let expected = [
+                {
+                    employee = { firstName = "Martin"; lastName = "Heidigger"; department = "Development" }
+                    kind = Amber
+                    duration = Days 1m
+                }
+            ]
+
+            expectAbsences expected "Amber event should be parsed" (otherEventParser json)
+        }
     ]

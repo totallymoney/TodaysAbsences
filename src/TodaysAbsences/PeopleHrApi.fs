@@ -381,6 +381,7 @@ module OtherEvent =
             | "Jury Duty" -> JuryDuty
             | "Remote" -> Remote
             | "On Site" -> OnSite
+            | "Amber" -> Amber
             | _ -> UnknownKind
         | None ->
             UnknownKind

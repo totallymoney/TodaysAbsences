@@ -15,6 +15,7 @@ type KindOfAbsense =
     | OnSite
     | Conference
     | JuryDuty
+    | Amber
     | UnknownKind
     
     override x.ToString() = 
@@ -31,6 +32,7 @@ type KindOfAbsense =
             | JuryDuty -> "Jury Duty"
             | Remote -> "Remote"
             | OnSite -> "On Site"
+            | Amber -> "Amber"
             | UnknownKind -> "Unknown reason"
 
 
