@@ -21,7 +21,6 @@ provider:
       - "logs:PutLogEvents"
     Resource: "*"
 
-# you can add packaging information here
 package:
   artifact: ./publish/deploy-package.zip
 
@@ -29,4 +28,5 @@ functions:
   TodaysAbsences-Function:
     handler: TodaysAbsences.Lambda::Handler::handler
     events:
-      - schedule: cron(0 9 ? * MON-FRI *)
+    # UTC TIME
+      - schedule: cron(0 8 ? * MON-FRI *)
