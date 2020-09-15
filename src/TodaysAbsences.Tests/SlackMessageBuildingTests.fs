@@ -1,17 +1,18 @@
 module SlackMessageBuildingTests
 
 
-open CoreModels
+open Domain
 open Expecto
 open SlackApi
 
+let logger _ = () 
 
 let private baseAttachment = {
-    fallback = "Today\'s absences and holidays, from PeopleHR"
-    color = "#34495e"
-    pretext = "Today's Absences and Holidays, from <https://totallymoney.peoplehr.net|PeopleHR>"
-    text = "Sorted by Department, then by first name within departments"
-    fields = []
+    Fallback = "Today's absences and holidays, from Bob"
+    Color = "#34495e"
+    Pretext = "Today's Absences and Holidays, from <https://app.hibob.com/home|Bob>"
+    Text = "Sorted by Department, then by first name within departments"
+    Fields = []
 }
 
 
@@ -20,9 +21,9 @@ let tests =
     testList "Slack Message Tests" [
 
         test "Creates a single attachment with base message content and no fields, given no absences" {
-            let expected = { attachments = [ baseAttachment ] }
+            let expected = { Attachments = [ baseAttachment ] }
 
-            Expect.equal (messageJson []) expected "Expected a single attachment, with no fields"
+            Expect.equal (messageJson logger []) expected "Expected a single attachment, with no fields"
         }
 
         testList "Creates a single attachment with base message content an a field per department" [
@@ -30,155 +31,135 @@ let tests =
             test "1 department" {
                 let absences = [
                     {
-                        employee = { firstName = "Joe"; lastName = "Bloggs"; department = "Development" }
-                        kind = Holiday
-                        duration = Days 4m
+                        Employee = { DisplayName = EmployeeDisplayName "Joe Bloggs"; 
+                                     Department = Department.Tech; 
+                                     Squad = None;
+                                     Id = "" |> EmployeeId }
+                        Details = { Policy = AbsencePolicy.Holiday; 
+                                    Duration = Days 4m }
                     }
                     {
-                        employee = { firstName = "John"; lastName = "Smith"; department = "Development" }
-                        kind = Wfh
-                        duration = Days 1m
+                        Employee = { DisplayName = EmployeeDisplayName "John Smith"; 
+                                     Department = Department.Tech; 
+                                     Squad = None;
+                                     Id = "" |> EmployeeId }
+                        Details = { Policy = AbsencePolicy.WorkingFromHome; 
+                                    Duration = Days 1m }
                     }
                 ]
                 let expectedFields = [
                     {
-                        title = "Development"
-                        value = "Joe Bloggs - Holiday - 4 days\nJohn Smith - Working from Home - 1 days"
+                        Title = "Tech"
+                        Value = "Joe Bloggs - Holiday - 4 days\nJohn Smith - WFH - 1 day"
                     }
                 ]
-                let expected = { attachments = [ { baseAttachment with fields = expectedFields } ] }
+                let expected = { Attachments = [ { baseAttachment with Fields = expectedFields } ] }
 
-                Expect.equal (messageJson absences) expected "Expected a single attachment with a single field"
+                Expect.equal (messageJson logger absences) expected "Expected a single attachment with a single field"
             }
 
             test "2 departments" {
                 let absences = [
                     {
-                        employee = { firstName = "Steve"; lastName = "Wozniak"; department = "Development" }
-                        kind = Appointment
-                        duration = LessThanADay Am
+                        Employee = { DisplayName = EmployeeDisplayName "Steve Wozniak"; 
+                                     Department = Department.Tech; 
+                                     Squad = None;
+                                     Id = "" |> EmployeeId }
+                        Details = { Policy = AbsencePolicy.Appointment; 
+                                    Duration = PartOfDay Morning }
                     }
                     {
-                        employee = { firstName = "Steve"; lastName = "Jobs"; department = "Marketing" }
-                        kind = Training
-                        duration = Days 2m
+                        Employee = { DisplayName = EmployeeDisplayName "Steve Jobs"; 
+                                     Department = Department.Marketing; 
+                                     Squad = None;
+                                     Id = "" |> EmployeeId }
+                        Details = { Policy = AbsencePolicy.Training; 
+                                    Duration = Days 2m }
                     }
                 ]
                 let expectedFields = [
                     {
-                        title = "Development"
-                        value = "Steve Wozniak - Appointment - Part-day (AM)"
+                        Title = "Marketing"
+                        Value = "Steve Jobs - Training - 2 days"
                     }
                     {
-                        title = "Marketing"
-                        value = "Steve Jobs - Training - 2 days"
+                        Title = "Tech"
+                        Value = "Steve Wozniak - Appointment - Part-day (AM)"
                     }
                 ]
-                let expected = { attachments = [ { baseAttachment with fields = expectedFields } ] }
+                let expected = { Attachments = [ { baseAttachment with Fields = expectedFields } ] }
 
-                Expect.equal (messageJson absences) expected "Expected a single attachment with a two fields"
+                Expect.equal (messageJson logger absences) expected "Expected a single attachment with a two fields"
             }
-
-            test "Fields are sorted by department name" {
-                let absences = [
-                    {
-                        employee = { firstName = "Julius"; lastName = "Caesar"; department = "Department D" }
-                        kind = Training
-                        duration = Days 2m
-                    }
-                    {
-                        employee = { firstName = "Dead"; lastName = "Mau5"; department = "Department C" }
-                        kind = Training
-                        duration = Days 2m
-                    }
-                    {
-                        employee = { firstName = "Mark"; lastName = "Antony"; department = "Department A" }
-                        kind = Training
-                        duration = Days 2m
-                    }
-                    {
-                        employee = { firstName = "James"; lastName = "Bond"; department = "Department B" }
-                        kind = Training
-                        duration = Days 2m
-                    }
-                ]
-                let expectedFields = [
-                    {
-                        title = "Department A"
-                        value = "Mark Antony - Training - 2 days"
-                    }
-                    {
-                        title = "Department B"
-                        value = "James Bond - Training - 2 days"
-                    }
-                    {
-                        title = "Department C"
-                        value = "Dead Mau5 - Training - 2 days"
-                    }
-                    {
-                        title = "Department D"
-                        value = "Julius Caesar - Training - 2 days"
-                    }
-                ]
-                let expected = { attachments = [ { baseAttachment with fields = expectedFields } ] }
-
-                Expect.equal (messageJson absences) expected "Expected a single attachment with a field for each department, sorted alphabetically"
-            }
-
         ]
 
         test "Creates a single attachment with base content and employees sorted by first name within departments" {
             let absences = [
                 {
-                    employee = { firstName = "Alice"; lastName = "of Wonderland"; department = "Sales" }
-                    kind = Appointment
-                    duration = Days 1m
+                    Employee = { DisplayName = EmployeeDisplayName "Alice of Wonderland"; 
+                                 Department = Department.Commercial; 
+                                 Squad = None;
+                                 Id = "" |> EmployeeId }
+                    Details = { Policy = AbsencePolicy.Appointment; 
+                                Duration = Days 1m }
                 }
                 {
-                    employee = { firstName = "Trevor"; lastName = "McTest"; department = "Design" }
-                    kind = Holiday
-                    duration = Days 1m
+                    Employee = { DisplayName = EmployeeDisplayName "Trevor McTest"; 
+                                 Department = Department.Product; 
+                                 Squad = None;
+                                 Id = "" |> EmployeeId }
+                    Details = { Policy = AbsencePolicy.Holiday;
+                                Duration = Days 1m }
                 }
                 {
-                    employee = { firstName = "Edward"; lastName = "Sheeran"; department = "Design" }
-                    kind = Holiday
-                    duration = Days 1m
+                    Employee = { DisplayName = EmployeeDisplayName "Edward Sheeran"; 
+                                 Department = Department.Product; 
+                                 Squad = None;
+                                 Id = "" |> EmployeeId }
+                    Details = { Policy = AbsencePolicy.Holiday;
+                                Duration = Days 1m }
                 }
                 {
-                    employee = { firstName = "Charles"; lastName = "Chaplin"; department = "Sales" }
-                    kind = Appointment
-                    duration = Days 1m
+                    Employee = { DisplayName = EmployeeDisplayName "Charles Chaplin"; 
+                                 Department = Department.Commercial; 
+                                 Squad = None;
+                                 Id = "" |> EmployeeId }
+                    Details = { Policy = AbsencePolicy.Appointment; 
+                                Duration = Days 1m }
                 }
                 {
-                    employee = { firstName = "Bob"; lastName = "Feynman"; department = "Sales" }
-                    kind = Appointment
-                    duration = Days 1m
+                    Employee = { DisplayName = EmployeeDisplayName "Bob Feynman"; 
+                                 Department = Department.Commercial; 
+                                 Squad = None;
+                                 Id = "" |> EmployeeId }
+                    Details = { Policy = AbsencePolicy.Appointment; 
+                                Duration = Unknown "couple of hours maybe more maybe less" }
                 }
             ]
             let expectedFields = [
                 {
-                    title = "Design"
-                    value = "Edward Sheeran - Holiday - 1 days\nTrevor McTest - Holiday - 1 days"
+                    Title = "Commercial"
+                    Value = "Alice of Wonderland - Appointment - 1 day\nBob Feynman - Appointment - Unknown duration\nCharles Chaplin - Appointment - 1 day"
                 }
                 {
-                    title = "Sales"
-                    value = "Alice of Wonderland - Appointment - 1 days\nBob Feynman - Appointment - 1 days\nCharles Chaplin - Appointment - 1 days"
+                    Title = "Product"
+                    Value = "Edward Sheeran - Holiday - 1 day\nTrevor McTest - Holiday - 1 day"
                 }
             ]
-            let expected = { attachments = [ { baseAttachment with fields = expectedFields } ] }
+            let expected = { Attachments = [ { baseAttachment with Fields = expectedFields } ] }
 
-            Expect.equal (messageJson absences) expected "Expected a single attachment with employees sorted by first name within department"
+            Expect.equal (messageJson logger absences) expected "Expected a single attachment with employees sorted by first name within department"
         }
 
         test "Creates a JSON string that matches the content of the given model" {
             let fields = [
                 {
-                    title = "Sales"
-                    value = "Carl Sagan - Holiday - 1 days"
+                    Title = "Sales"
+                    Value = "Carl Sagan - Holiday - 1 day"
                 }
             ]
-            let message = { attachments = [ { baseAttachment with fields = fields } ] }
-            let expectedJson = """{"attachments":[{"color":"#34495e","fallback":"Today's absences and holidays, from PeopleHR","fields":[{"title":"Sales","value":"Carl Sagan - Holiday - 1 days"}],"pretext":"Today's Absences and Holidays, from <https://totallymoney.peoplehr.net|PeopleHR>","text":"Sorted by Department, then by first name within departments"}]}"""
+            let message = { Attachments = [ { baseAttachment with Fields = fields } ] }
+            let expectedJson = """{"attachments":[{"color":"#34495e","fallback":"Today's absences and holidays, from Bob","fields":[{"title":"Sales","value":"Carl Sagan - Holiday - 1 day"}],"pretext":"Today's Absences and Holidays, from <https://app.hibob.com/home|Bob>","text":"Sorted by Department, then by first name within departments"}]}"""
             Expect.equal (messageJsonString message) expectedJson "Expected the returned json to match the expected JSON"
         }
 
