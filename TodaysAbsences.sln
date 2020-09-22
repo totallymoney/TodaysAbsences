@@ -4,8 +4,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences", "src\Today
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences.Lambda", "src\TodaysAbsences.Lambda\TodaysAbsences.Lambda.fsproj", "{02CD06A4-BAFF-4B5C-912F-27940D7DFEC0}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences.Tests", "src\TodaysAbsences.Tests\TodaysAbsences.Tests.fsproj", "{77B375A3-39B5-469D-9090-510514D70946}"
-EndProject
+#Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TodaysAbsences.Tests", "src\TodaysAbsences.Tests\TodaysAbsences.Tests.fsproj", "{77B375A3-39B5-469D-9090-510514D70946}"
+#EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

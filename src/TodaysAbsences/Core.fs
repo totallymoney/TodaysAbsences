@@ -3,6 +3,7 @@ module Core
 let (>>=) r f = Result.bind f r
 let (|>>) r m = Result.map m r
 
+type Logger = string -> unit
 
 module Result = 
     let either fOk fError = function

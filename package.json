@@ -1,5 +1,13 @@
 {
   "dependencies": {
     "serverless": "^1.51.0"
+  },
+  "scripts": {
+    "paket:restore": "mono .paket/paket.exe restore",
+    "paket:add": "mono .paket/paket.exe add",
+    "build": "dotnet build",
+    "test": "dotnet run --project ./src/TodaysAbsences.Tests/TodaysAbsences.Tests.fsproj",
+    "deploy:stage": "./publish.sh && ./deploy.sh stage",
+    "deploy:prod": "./publish.sh && ./deploy.sh production"
   }
 }
