@@ -38,7 +38,8 @@ type Department =
         | "Marketing" -> Marketing
         | "Product" -> Product
         | "Tech" -> Tech
-        | _ -> Other
+        | x -> printf "Other department: %s" x
+               Other
 
 type Squad = Squad of string
 type EmployeeWorkDetails = 
@@ -151,7 +152,7 @@ type Absence =
              | None -> a.Employee.DisplayName |> EmployeeDisplayName.unwrap |> removeAccents) 
             (a.Details.Policy |> AbsencePolicy.unwrap)
             (a.Details.Duration |> AbsenceDuration.unwrap logger)
-    
+
 
 let getDuration logger (today:DateTime) absence = 
     let startPortion = toPartOfDay absence.StartPortion
@@ -191,7 +192,7 @@ let toAbsence logger today absence details =
     {
         Employee = {
             Id = absence.EmployeeId |> EmployeeId
-            DisplayName = absence.EmployeeDisplayName |> EmployeeDisplayName
+            DisplayName = absence.EmployeeDisplayName |> removeAccents |> EmployeeDisplayName
             Department = employeeDetails.Department
             Squad = employeeDetails.Squad
         }

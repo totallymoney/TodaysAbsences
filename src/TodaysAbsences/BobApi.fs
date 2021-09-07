@@ -6,10 +6,12 @@ open Dto
 open System
 open FSharp.Data
 open JsonHelper
+open System.Net.Http
 
-let unwrapHttpResponseBodyAsText = function
-    | Text text -> text
-    | Binary _ -> failwith "Should be Text format"
+let client (apiKey:string) = 
+    let c = new HttpClient()
+    c.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey) |> ignore
+    c
 
 let absencesUrl (fromDate:DateTime) (toDate:DateTime) =
     let dateFormat (date:DateTime) = date.ToString "yyyy-MM-dd"
@@ -17,19 +19,13 @@ let absencesUrl (fromDate:DateTime) (toDate:DateTime) =
 let employeeDetailsUrl (employeeId:string ) = sprintf "https://api.hibob.com/v1/people/%s" employeeId
 
 let getAbsenceList apiKey (today:DateTime) = 
-    Http.Request
-        ( absencesUrl today today,
-          httpMethod = "GET",
-          headers = [ HttpRequestHeaders.ContentType HttpContentTypes.Json;
-                      HttpRequestHeaders.Authorization apiKey ])
-    |> (fun response -> response.Body |> unwrapHttpResponseBodyAsText)
+    absencesUrl today today 
+    |> (client apiKey).GetAsync
+    |> fun response -> response.Result.Content.ReadAsStringAsync().Result
     |> deserialiseToAbsencesDto
 
 let getEmployeeDetails apiKey (employeeId:string) = 
-    Http.Request
-        ( employeeDetailsUrl employeeId,
-          httpMethod = "GET",
-          headers = [ HttpRequestHeaders.ContentType HttpContentTypes.Json;
-                      HttpRequestHeaders.Authorization apiKey ])
-    |> (fun response -> response.Body |> unwrapHttpResponseBodyAsText)
+    employeeDetailsUrl employeeId
+    |> (client apiKey).GetAsync
+    |> fun response -> response.Result.Content.ReadAsStringAsync().Result
     |> deserialiseToEmployeeDetailsDto

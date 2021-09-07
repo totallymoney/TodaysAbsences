@@ -25,6 +25,8 @@ let getEnvVarOrThrowIfMissing key =
 
 let private sendTodaysAbsencesMessage (logger:Logger) apiKey webhookUrl =
     getAbsences logger (getAbsenceList apiKey) (getEmployeeDetails apiKey) DateTime.Today
+    |> fun l -> printf "%s" (JsonHelper.JsonSerializer.serialize l)
+                l
     |> sendMessage logger webhookUrl
 
 let handler (_:Stream, lambdaContext:ILambdaContext) =
