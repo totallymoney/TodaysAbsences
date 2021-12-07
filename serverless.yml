@@ -2,11 +2,12 @@ service: serverless-TodaysAbsences
 
 provider:
   name: aws
+  profile: default
   runtime: dotnetcore2.1
   stage: ${opt:stage, 'stage'}
   region: eu-west-1
-  timeout: 60 #sec
-  memorySize: 1024 #MB
+  timeout: 60
+  memorySize: 1024
 
   environment:
     BOB_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_KEY}
