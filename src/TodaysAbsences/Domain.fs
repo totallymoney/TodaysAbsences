@@ -94,7 +94,7 @@ type AbsencePolicy =
         | Volunteering -> "Volunteering"
         | PaternityLeave -> "Paternity Leave"
         | MaternityLeave -> "Maternity Leave"
-        | WorkkingAbroad -> "Working Abroad"
+        | WorkingAbroad -> "Working Abroad"
         | Other -> "Other"
 
     static member create = 
@@ -217,5 +217,5 @@ let getAbsences (logger: string -> unit)
     let details = 
         absences |> List.map (fun a -> a.EmployeeId
                                        |> getEmployeeDetails)
-                                       
+
     List.zipInto absences details (toAbsence logger today)

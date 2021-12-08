@@ -20,4 +20,5 @@ fi
 
 ENVIRONMENT=$1
 
+./publish.sh
 yarn run sls deploy --stage "$ENVIRONMENT" --force --verbose
