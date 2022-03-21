@@ -20,6 +20,9 @@ type Department =
     | Marketing
     | Product
     | Tech
+    | Finance
+    | People
+    | LegalAndCompliance
     | Other
 
     static member unwrap = 
@@ -29,6 +32,9 @@ type Department =
         | Marketing -> "Marketing"
         | Product -> "Product"
         | Tech -> "Tech"
+        | Finance -> "Finance"
+        | People -> "People"
+        | LegalAndCompliance -> "Legal & Compliance"
         | Other -> "Other"
     
     static member create = 
@@ -38,6 +44,9 @@ type Department =
         | "Marketing" -> Marketing
         | "Product" -> Product
         | "Tech" -> Tech
+        | "Finance" -> Finance
+        | "People" -> People
+        | "Legal & Compliance" -> LegalAndCompliance
         | x -> printf "Other department: %s" x
                Other
 

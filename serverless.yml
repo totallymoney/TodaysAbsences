@@ -29,4 +29,4 @@ functions:
     handler: TodaysAbsences.Lambda::Handler::handler
     events:
     # UTC TIME
-      - schedule: cron(0 8 ? * MON-FRI *)
+      - schedule: cron(0 9 ? * MON-FRI *)
