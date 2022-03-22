@@ -23,6 +23,7 @@ type Department =
     | Finance
     | People
     | LegalAndCompliance
+    | Operations
     | Other
 
     static member unwrap = 
@@ -35,6 +36,7 @@ type Department =
         | Finance -> "Finance"
         | People -> "People"
         | LegalAndCompliance -> "Legal & Compliance"
+        | Operations -> "Operations"
         | Other -> "Other"
     
     static member create = 
@@ -46,7 +48,9 @@ type Department =
         | "Tech" -> Tech
         | "Finance" -> Finance
         | "People" -> People
+        | "Legal" -> LegalAndCompliance
         | "Legal & Compliance" -> LegalAndCompliance
+        | "Operations" -> Operations
         | x -> printf "Other department: %s" x
                Other
 
