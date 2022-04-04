@@ -92,6 +92,7 @@ type AbsencePolicy =
     | PaternityLeave
     | MaternityLeave
     | WorkingAbroad
+    | StudyLeave
     | Other
 
     static member unwrap = 
@@ -108,6 +109,7 @@ type AbsencePolicy =
         | PaternityLeave -> "Paternity Leave"
         | MaternityLeave -> "Maternity Leave"
         | WorkingAbroad -> "Working Abroad"
+        | StudyLeave -> "Study Leave"
         | Other -> "Other"
 
     static member create = 
@@ -124,6 +126,7 @@ type AbsencePolicy =
         | "Paternity Leave" -> PaternityLeave
         | "Maternity Leave" -> MaternityLeave
         | "Working Abroad" -> WorkingAbroad
+        | "Study Leave" -> StudyLeave
         | _ -> Other
 
 type PartOfDay = Morning | Afternoon | AllDay
