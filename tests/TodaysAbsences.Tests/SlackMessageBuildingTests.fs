@@ -23,7 +23,7 @@ let tests =
         test "Creates a single attachment with base message content and no fields, given no absences" {
             let expected = { Attachments = [ baseAttachment ] }
 
-            Expect.equal (messageJson logger []) expected "Expected a single attachment, with no fields"
+            Expect.equal (messageJson []) expected "Expected a single attachment, with no fields"
         }
 
         testList "Creates a single attachment with base message content an a field per department" [
@@ -55,7 +55,7 @@ let tests =
                 ]
                 let expected = { Attachments = [ { baseAttachment with Fields = expectedFields } ] }
 
-                Expect.equal (messageJson logger absences) expected "Expected a single attachment with a single field"
+                Expect.equal (messageJson absences) expected "Expected a single attachment with a single field"
             }
 
             test "2 departments" {
@@ -89,7 +89,7 @@ let tests =
                 ]
                 let expected = { Attachments = [ { baseAttachment with Fields = expectedFields } ] }
 
-                Expect.equal (messageJson logger absences) expected "Expected a single attachment with a two fields"
+                Expect.equal (messageJson absences) expected "Expected a single attachment with a two fields"
             }
         ]
 
@@ -148,7 +148,7 @@ let tests =
             ]
             let expected = { Attachments = [ { baseAttachment with Fields = expectedFields } ] }
 
-            Expect.equal (messageJson logger absences) expected "Expected a single attachment with employees sorted by first name within department"
+            Expect.equal (messageJson absences) expected "Expected a single attachment with employees sorted by first name within department"
         }
 
         test "Creates a JSON string that matches the content of the given model" {
@@ -160,7 +160,7 @@ let tests =
             ]
             let message = { Attachments = [ { baseAttachment with Fields = fields } ] }
             let expectedJson = """{"attachments":[{"color":"#34495e","fallback":"Today's absences and holidays, from Bob","fields":[{"title":"Sales","value":"Carl Sagan - Holiday - 1 day"}],"pretext":"Today's Absences and Holidays, from <https://app.hibob.com/home|Bob>","text":"Sorted by Department, then by first name within departments"}]}"""
-            Expect.equal (messageJsonString message) expectedJson "Expected the returned json to match the expected JSON"
+            Expect.equal (messageJsonToString message) expectedJson "Expected the returned json to match the expected JSON"
         }
 
     ]

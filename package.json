@@ -1,13 +1,14 @@
 {
   "dependencies": {
-    "serverless": "^1.51.0"
+    "@totallymoney/github-serverless-dotnet-artifacts": "^3.0.1",
+    "serverless": "^3.19.0"
   },
   "scripts": {
-    "paket:restore": "mono .paket/paket.exe restore",
-    "paket:add": "mono .paket/paket.exe add",
-    "build": "dotnet build",
-    "test": "dotnet run --project ./src/TodaysAbsences.Tests/TodaysAbsences.Tests.fsproj",
-    "deploy:stage": "./publish.sh && ./deploy.sh stage",
-    "deploy:prod": "./publish.sh && ./deploy.sh production"
+    "restore": "dotnet tool restore && dotnet paket restore",
+    "build": "dotnet build src && dotnet build tests/TodaysAbsences.Tests",
+    "test": "dotnet run --project ./tests/TodaysAbsences.Tests/TodaysAbsences.Tests.fsproj",
+    "publish": "gsda-publish totallymoney/TodaysAbsences src",
+    "deploy": "gsda-deploy totallymoney/TodaysAbsences",
+    "pick": "gsda-pick -e stage -e prod"
   }
 }

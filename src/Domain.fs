@@ -56,28 +56,22 @@ type Department =
 
 type Squad = Squad of string
 type EmployeeWorkDetails = 
-    {
-        Department : Department
-        Squad : Squad option
-    }
+    { Department : Department
+      Squad : Squad option }
 
-    static member create logger = function
-        | Ok details -> {
-                            Department = details.Work.Department |> Department.create
-                            Squad = details.Work.Custom.Squad_5Gqot |> Option.map Squad
-                        }
-        | Error e -> logger (string e)
-                     {
-                        Department = Other
-                        Squad = None
-                     } 
+    static member create = function
+        | Some details -> 
+            {  Department = details.Work.Department |> Department.create
+               Squad = details.Work.Custom.Squad_5Gqot |> Option.map Squad }
+        | None -> 
+            { Department = Other
+              Squad = None }
 
-type Employee = {
-    Id : EmployeeId
-    DisplayName : EmployeeDisplayName
-    Department : Department
-    Squad: Squad option
-}
+type Employee = 
+    { Id : EmployeeId
+      DisplayName : EmployeeDisplayName
+      Department : Department
+      Squad: Squad option }
 
 type AbsencePolicy =
     | Holiday
@@ -142,14 +136,13 @@ type AbsenceDuration =
     | PartOfDay of PartOfDay
     | Unknown of string
     
-    static member unwrap logger = 
+    static member unwrap = 
         function
         | Days days -> sprintf (if days = 1m then "%g day" else "%g days") days
         | PartOfDay Morning -> "Part-day (AM)"
         | PartOfDay Afternoon -> "Part-day (PM)"
         | PartOfDay AllDay -> "All day"
-        | Unknown reason -> logger reason
-                            "Unknown duration"
+        | Unknown reason -> "Unknown duration"
 
 type AbsenceDetails = {
         Policy: AbsencePolicy
@@ -157,12 +150,10 @@ type AbsenceDetails = {
     }
 
 type Absence = 
-    {
-        Employee : Employee
-        Details: AbsenceDetails
-    }
+    { Employee : Employee
+      Details: AbsenceDetails }
 
-    static member toString logger a = 
+    static member toString a = 
         sprintf "%s - %s - %s" 
             (match a.Employee.Squad with
              | Some (Squad squad) -> sprintf "%s *(%s)*" 
@@ -170,7 +161,7 @@ type Absence =
                                          (string squad)
              | None -> a.Employee.DisplayName |> EmployeeDisplayName.unwrap |> removeAccents) 
             (a.Details.Policy |> AbsencePolicy.unwrap)
-            (a.Details.Duration |> AbsenceDuration.unwrap logger)
+            (a.Details.Duration |> AbsenceDuration.unwrap)
 
 
 let getDuration logger (today:DateTime) absence = 
@@ -204,34 +195,17 @@ let getDuration logger (today:DateTime) absence =
             let duration = (decimal (endDate - today).TotalDays) + offset
             Days duration
     | _, Error e
-    | Error e, _ -> Unknown e
+    | Error e, _ -> 
+        logger e
+        Unknown e
 
 let toAbsence logger today absence details = 
-    let employeeDetails = EmployeeWorkDetails.create logger details
-    {
-        Employee = {
-            Id = absence.EmployeeId |> EmployeeId
-            DisplayName = absence.EmployeeDisplayName |> removeAccents |> EmployeeDisplayName
-            Department = employeeDetails.Department
-            Squad = employeeDetails.Squad
-        }
-        Details = {
-            Policy = absence.PolicyTypeDisplayName |> AbsencePolicy.create
-            Duration = getDuration logger today absence
-        }
-    }
-
-let getAbsences (logger: string -> unit)
-                (getAbsenceList : DateTime -> Result<AbsencesResponseDto, Error>) 
-                (getEmployeeDetails : string -> Result<EmployeeDetailsResponseDto, Error>)
-                (today:DateTime) = 
-    let absences = getAbsenceList today
-                   |> Result.map (fun dto -> dto.Outs)
-                   |> function
-                      | Ok outs -> outs
-                      | Error error -> string error |> failwith
-    let details = 
-        absences |> List.map (fun a -> a.EmployeeId
-                                       |> getEmployeeDetails)
-
-    List.zipInto absences details (toAbsence logger today)
+    let employeeDetails = EmployeeWorkDetails.create details
+    { Employee = 
+        { Id = absence.EmployeeId |> EmployeeId
+          DisplayName = absence.EmployeeDisplayName |> removeAccents |> EmployeeDisplayName
+          Department = employeeDetails.Department
+          Squad = employeeDetails.Squad }
+      Details =
+        { Policy = absence.PolicyTypeDisplayName |> AbsencePolicy.create
+          Duration = getDuration logger today absence } }
