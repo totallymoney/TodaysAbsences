@@ -1,0 +1,6 @@
+Chiron
+FSharp.Core
+FSharp.Data
+Microsoft.FSharpLu.Json
+Amazon.Lambda.Core
+Amazon.Lambda.Serialization.Json

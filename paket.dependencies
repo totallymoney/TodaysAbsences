@@ -1,11 +1,9 @@
-source https://www.nuget.org/api/v2
-
-framework: netcoreapp2.1
+framework auto-detect
+source https://api.nuget.org/v3/index.json
+nuget Amazon.Lambda.Core
+nuget Amazon.Lambda.Serialization.Json
 nuget Chiron
-nuget Expecto
 nuget FSharp.Core
 nuget FSharp.Data
-nuget Amazon.Lambda.Serialization.Json
+nuget Expecto
 nuget Microsoft.FSharpLu.Json
-nuget Microsoft.NET.Test.Sdk
-clitool Amazon.Lambda.Tools

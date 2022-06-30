@@ -2,7 +2,7 @@ module Http
 
 open FSharp.Data
 open System
-
+open Errors
 
 let private bodyString = function
     | Text s -> s
@@ -11,9 +11,9 @@ let private bodyString = function
 
 let private responseBody (response:HttpResponse) =
     if response.StatusCode >= 200 && response.StatusCode <= 299 then
-        Ok response.Body
+        Ok (bodyString response.Body)
     else
-        Error (sprintf "Non-success status code %i for %s" response.StatusCode response.ResponseUrl)
+        Error (SlackApiError <| sprintf "Non-success status code %i for %s" response.StatusCode response.ResponseUrl)
 
 
 let private postJsonInner url body =
@@ -25,4 +25,4 @@ let private postJsonInner url body =
 
 
 let postJson url =
-    postJsonInner url >> responseBody >> Result.bind (bodyString >> Ok)
+    postJsonInner url >> responseBody

@@ -1,7 +1,8 @@
-module JsonHelper
+module JsonHelpers
 
 open Microsoft.FSharpLu.Json
 open Newtonsoft.Json
+open Errors
 
 type JsonSettings =
     static member settings =
@@ -14,3 +15,5 @@ type JsonSettings =
     static member formatting = Formatting.None
 
 type JsonSerializer = With<JsonSettings>
+
+let toJson = JsonSerializer.serialize

@@ -3,16 +3,17 @@ service: serverless-TodaysAbsences
 provider:
   name: aws
   profile: default
-  runtime: dotnetcore2.1
+  runtime: dotnet6
+  architecture: arm64
   stage: ${opt:stage, 'stage'}
   region: eu-west-1
   timeout: 60
   memorySize: 1024
-
   environment:
+    BOB_API_URL: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_URL}
     BOB_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_KEY}
-    SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
-    
+    # SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
+    SLACK_WEBHOOK_URL: None
   iamRoleStatements:
   - Effect: "Allow"
     Action:
@@ -21,12 +22,17 @@ provider:
       - "logs:PutLogEvents"
     Resource: "*"
 
+custom:
+  events:
+    stage: []
+    prod:
+      # UTC TIME
+      - schedule: cron(0 8 ? * MON-FRI *)
+
 package:
-  artifact: ./publish/deploy-package.zip
+  artifact: package.zip
 
 functions:
-  TodaysAbsences-Function:
-    handler: TodaysAbsences.Lambda::Handler::handler
-    events:
-    # UTC TIME
-      - schedule: cron(0 8 ? * MON-FRI *)
+  SendAbsencesMessage:
+    handler: TodaysAbsences::Handlers::SendAbsencesMessage
+    events: ${self:custom.events.${self:provider.stage}}

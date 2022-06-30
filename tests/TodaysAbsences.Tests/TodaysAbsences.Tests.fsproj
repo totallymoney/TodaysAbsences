@@ -2,23 +2,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
-    <GenerateProgramFile>false</GenerateProgramFile>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Helpers.fs" />
-    <Compile Include="BobAbsenceResponseParsingTests.fs" />
+    <Compile Include="BobApiResponseParsingTests.fs" />
     <Compile Include="RemoveAccentsTests.fs" />
     <Compile Include="SlackMessageBuildingTests.fs" />
-    <!--<Compile Include="SpecialCharacterSerializationTests.fs" />-->
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TodaysAbsences\TodaysAbsences.fsproj" />
+    <ProjectReference Include="..\..\src\TodaysAbsences.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
