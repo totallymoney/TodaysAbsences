@@ -12,8 +12,7 @@ provider:
   environment:
     BOB_API_URL: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_URL}
     BOB_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_KEY}
-    # SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
-    SLACK_WEBHOOK_URL: None
+    SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
   iamRoleStatements:
   - Effect: "Allow"
     Action:
