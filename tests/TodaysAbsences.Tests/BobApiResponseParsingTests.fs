@@ -17,20 +17,23 @@ let tomorrow = DateTime.Parse "2020-01-02"
 let absencesParser = deserialiseToAbsencesDto >> Result.getOk
 let detailsParser = deserialiseToEmployeeDetailsDto >> Result.getOk
 
+let emptyAbsences =
+    { Outs = [] }
 let emptyDetails = 
     { Employees = [] }
 
 let testConfig = 
     { BobApiUrl = ""
       BobApiKey = ""
-      SlackWebhookUrl = "" }
-let testContext absences details =
+      SlackWebhookUrl = ""
+      BirthdayOptIns = [] }
+let testContext =
     { Config = testConfig
       Log = fun _ -> ()
       Today = today 
       BobApiClient = 
-        { GetAbsenceList = fun _ -> async { return Ok absences }
-          GetEmployeeDetails = fun _ -> async { return Ok details } } }
+        { GetAbsenceList = fun _ -> async { return Ok emptyAbsences }
+          GetEmployeeDetails = fun _ -> async { return Ok emptyDetails } } }
 
 [<Tests>]
 let tests =
@@ -55,6 +58,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -64,8 +68,8 @@ let tests =
                                   Duration = Days 1m } } ]
 
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected the JSON to be parsed in to a 1 day absence" 
@@ -91,6 +95,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -99,8 +104,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = PartOfDay Afternoon } } ]
 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected the JSON to be parsed in to a afternoon absence (PM)" 
@@ -126,6 +130,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -134,8 +139,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = PartOfDay Morning } } ]
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected the JSON to be parsed in to a morning absence (AM)" 
@@ -161,6 +165,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -169,8 +174,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = Days 10.0m } } ]
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected a single multi-day absence to be parsed"
@@ -209,6 +213,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -223,8 +228,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = Days 8.5m } } ]
                 
-                { testContext absences emptyDetails with Today = tomorrow } 
-                |> getAbsences
+                getAbsences { testContext with Today = tomorrow } absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected multi-day absences' duration to be changed" 
@@ -250,6 +254,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -258,8 +263,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = PartOfDay Afternoon } } ]
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected today's portion of a multi-day absence" 
@@ -298,6 +302,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -312,8 +317,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = PartOfDay Afternoon } } ] 
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected multiple multi-day absences to be parsed" 
@@ -339,6 +343,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -347,8 +352,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = Unknown "good morning" } } ]
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected an unknown duration in the absence" 
@@ -374,6 +378,7 @@ let tests =
                             }
                         ]
                     }"""
+                let details = { Employees = [] }
                 let expected = [
                     { Employee = { DisplayName = EmployeeDisplayName "Bugs Bunny"; 
                                    Department = Department.Other; 
@@ -382,8 +387,7 @@ let tests =
                       Details = { Policy = AbsencePolicy.Holiday; 
                                   Duration = Days 10m } } ]
                 
-                testContext absences emptyDetails
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected a fallback to all_day portions in the absence" 
@@ -426,8 +430,7 @@ let tests =
                                   Duration = Days 10m } } ]
 
                 
-                testContext absences details
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected the JSON to be parsed in to a 1 day absence" 
@@ -439,6 +442,7 @@ let tests =
                     "employees": [
                     ]
                 }"""
+                let details = { Employees = [] }
                 let absences =
                     { Outs = [
                         { EmployeeId = "1"
@@ -459,8 +463,7 @@ let tests =
                                   Duration = Days 10m } } ]
 
                 
-                testContext absences details
-                |> getAbsences
+                getAbsences testContext absences details
                 |> Expect.wantOk "" 
                 |> Expect.equal 
                     "Expected the JSON to be parsed in to a 1 day absence" 

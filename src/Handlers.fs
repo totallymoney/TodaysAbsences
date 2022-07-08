@@ -17,11 +17,14 @@ let SendAbsencesMessage (_ : Stream, lambdaContext : ILambdaContext) =
     result {
         let config = getConfig
         let context = getContext lambdaContext.Logger.Log DateTime.Today config
+        let! (absences, details) = getBobData context
 
-        let! absenceDetails = getAbsences context
+        let! absenceDetails = getAbsences context absences details
+        let birthdays = getBirthdays context details
         do printf "%s" (JsonHelpers.JsonSerializer.serialize absenceDetails)
-
-        return! sendMessage context absenceDetails
+        do printf "%s" (JsonHelpers.JsonSerializer.serialize birthdays)
+        
+        return! sendMessage context absenceDetails birthdays
     }
     |> function
        | Ok message -> sprintf "Ok: %s" message

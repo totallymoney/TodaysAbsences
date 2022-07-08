@@ -1,6 +1,8 @@
 [<AutoOpen>]
 module TypeExtensions
 
+open System
+
 let tee f x =
     f x
     x
@@ -110,3 +112,7 @@ module Async =
         xAsync
         |> Async.Catch
         |> map Result.ofChoice
+
+module String =
+    let until (c : char) (s : string) =
+        s.Substring(0, s.IndexOf c)

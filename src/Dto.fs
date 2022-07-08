@@ -19,13 +19,17 @@ let deserialiseToAbsencesDto json =
     with ex -> sprintf"%s\n%s" ex.Message json |> DeserialisationError  |> Error
 
 type SquadDto = 
-    { Squad_5Gqot: string option }
+    { Squad_5Gqot : string option }
 type EmployeeWorkDetailsDto = 
     { Department : string
       Custom: SquadDto }
+type EmployeePersonalDetailsDto =
+    { ShortBirthDate : string }
 type EmployeeDetailsDto = 
     { Work : EmployeeWorkDetailsDto
-      Id : string }
+      Personal : EmployeePersonalDetailsDto
+      Id : string
+      FullName : string }
 type EmployeeDetailsResponseDto =
     { Employees : EmployeeDetailsDto list }
 let deserialiseToEmployeeDetailsDto json =

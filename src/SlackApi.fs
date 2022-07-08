@@ -7,68 +7,69 @@ open Domain
 open AppContext
 open JsonHelpers
 
-type AttachmentField =
-    { Title : string
-      Value : string }
+type Block =
+    { ``type`` : string
+      text : SubBlock option }
+and SubBlock =
+    { ``type`` : string
+      text : string }
 
-    static member ToJson (f:AttachmentField) = json {
-        do! Json.write "title" f.Title
-        do! Json.write "value" f.Value
-    }
+type Message = 
+    { blocks : Block seq }
+
+module Block =
+    let divider : Block =
+        { ``type`` = "divider"
+          text = None }
+    let section text : Block =
+        { ``type`` = "section"
+          text = Some
+            { ``type`` = "mrkdwn"
+              text = text } }
 
 
-type Attachment =
-    { Fallback : string
-      Color : string
-      Pretext : string
-      Text : string
-      Fields : AttachmentField list }
-
-    static member ToJson (a:Attachment) = json {
-        do! Json.write "fallback" a.Fallback
-        do! Json.write "color" a.Color
-        do! Json.write "pretext" a.Pretext
-        do! Json.write "text" a.Text
-        do! Json.write "fields" a.Fields
-    }
-
-type Message =
-    { Attachments : Attachment list }
-
-    static member ToJson (m:Message) = json {
-        do! Json.write "attachments" m.Attachments
-    }
-
-let private titleAttachment = 
-    { Fallback = "Today's absences and holidays, from Bob"
-      Color = "#34495e"
-      Pretext = "Today's Absences and Holidays, from <https://app.hibob.com/home|Bob>"
-      Text = "Sorted by Department, then by first name within departments"
-      Fields = [] }
-
-let private absenceStrings =
-    List.sortBy (fun a -> (a.Employee.DisplayName))
-    >> List.map (fun abs -> abs |> Absence.toString) 
+let private absenceStrings : seq<Absence> -> string =
+    Seq.sortBy (fun a -> (a.Employee.DisplayName))
+    >> Seq.map (fun abs -> abs |> Absence.toString) 
     >> String.concat "\n"
 
-let private departmentField (department, absences) = 
-    { Title = department
-      Value = absenceStrings absences }
+let departmentAbsenceString (department, absences) =
+    absences
+    |> absenceStrings
+    |> sprintf "*%s*\n%s" department
 
-let private fields =
-    List.groupBy (fun a -> a.Employee.Department |> Department.unwrap) 
-    >> List.sortBy fst 
-    >> List.map departmentField
+let absenceBlocks : seq<Absence> -> seq<Block> = 
+    Seq.groupBy (fun a -> a.Employee.Department |> Department.unwrap) 
+    >> Seq.sortBy fst 
+    >> Seq.map departmentAbsenceString
+    >> Seq.map Block.section
 
-let messageJson absences = 
-    { Attachments = [{ titleAttachment with Fields = fields absences }]}
+let birthdayBlocks : seq<Birthday> -> seq<Block> =
+    Seq.sortBy (fun (b : Birthday) -> b.Employee.FullName)
+    >> Seq.map(fun b ->
+        match b.Day with
+        | Some day -> sprintf ":birthday: %s (on %s)" b.Employee.FullName day
+        | None -> sprintf ":birthday: %s" b.Employee.FullName
+        |> Block.section)
 
-let messageJsonToString (message : Message) =
-    Json.serialize message |> Json.format
+let buildMessageBlocks absences birthdays =
+    seq {
+        yield Block.section "Today's Absences and Holidays, from <https://app.hibob.com/home|Bob>"
+        yield Block.divider
+        yield! absenceBlocks absences
+
+        if Seq.length birthdays > 0 then
+            yield Block.divider
+            yield Block.section "*Birthdays*"
+            yield! birthdayBlocks birthdays
+     }
+
+let buildMessage absences birthdays =
+    { blocks = buildMessageBlocks absences birthdays }
 
 module Http =
-    let sendMessage (context : Context) =
-        messageJson 
-        >> messageJsonToString
-        >> tee (toJson >> context.Log)
-        >> postJson context.Config.SlackWebhookUrl
+    let sendMessage (context : Context) absences birthdays =
+        buildMessage absences birthdays
+        |> toJson
+        |> tee (toJson >> context.Log)
+        |> postJson context.Config.SlackWebhookUrl

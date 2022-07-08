@@ -13,6 +13,7 @@ provider:
     BOB_API_URL: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_URL}
     BOB_API_KEY: ${ssm:/todays-absences/${self:provider.stage}/BOB_API_KEY}
     SLACK_WEBHOOK_URL: ${ssm:/todays-absences/${self:provider.stage}/SLACK_WEBHOOK_URL}
+    BIRTHDAY_OPT_INS: ${ssm:/todays-absences/${self:provider.stage}/BIRTHDAY_OPT_INS}
   iamRoleStatements:
   - Effect: "Allow"
     Action:

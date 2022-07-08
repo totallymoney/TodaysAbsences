@@ -71,7 +71,7 @@ type Employee =
     { Id : EmployeeId
       DisplayName : EmployeeDisplayName
       Department : Department
-      Squad: Squad option }
+      Squad : Squad option }
 
 type AbsencePolicy =
     | Holiday
@@ -144,10 +144,9 @@ type AbsenceDuration =
         | PartOfDay AllDay -> "All day"
         | Unknown reason -> "Unknown duration"
 
-type AbsenceDetails = {
-        Policy: AbsencePolicy
-        Duration: AbsenceDuration
-    }
+type AbsenceDetails = 
+    { Policy: AbsencePolicy
+      Duration: AbsenceDuration }
 
 type Absence = 
     { Employee : Employee
@@ -163,8 +162,11 @@ type Absence =
             (a.Details.Policy |> AbsencePolicy.unwrap)
             (a.Details.Duration |> AbsenceDuration.unwrap)
 
+type Birthday =
+    { Employee : EmployeeDetailsDto
+      Day : string option }
 
-let getDuration logger (today:DateTime) absence = 
+let getDuration logger (today : DateTime) absence = 
     let startPortion = toPartOfDay absence.StartPortion
     let endPortion = toPartOfDay absence.EndPortion
     match tryParse absence.StartDate, tryParse absence.EndDate with
