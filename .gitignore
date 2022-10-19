@@ -10,3 +10,4 @@ node_modules/
 publish
 .vscode
 package.zip
+yarn-error.log

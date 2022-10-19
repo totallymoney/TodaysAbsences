@@ -6,6 +6,7 @@
   "scripts": {
     "restore": "dotnet tool restore && dotnet paket restore",
     "build": "dotnet build src && dotnet build tests/TodaysAbsences.Tests",
+    "package": "dotnet lambda package \"package.zip\" -farch arm64 -pl src/ -c Release",
     "test": "dotnet run --project ./tests/TodaysAbsences.Tests/TodaysAbsences.Tests.fsproj",
     "publish": "gsda-publish totallymoney/TodaysAbsences src",
     "deploy": "gsda-deploy totallymoney/TodaysAbsences",
