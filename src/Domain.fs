@@ -167,8 +167,8 @@ type Birthday =
       Day : string option }
 
 let getDuration logger (today : DateTime) absence = 
-    let startPortion = toPartOfDay absence.StartPortion
-    let endPortion = toPartOfDay absence.EndPortion
+    let startPortion = toPartOfDay absence.StartDatePortion
+    let endPortion = toPartOfDay absence.EndDatePortion
     match tryParse absence.StartDate, tryParse absence.EndDate with
     | Ok startDate, Ok endDate -> 
         if today = endDate then

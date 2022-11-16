@@ -51,9 +51,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "all_day",
+                                "startDatePortion": "all_day",
                                 "endDate": "2020-01-01",
-                                "endPortion": "all_day",
+                                "endDatePortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -75,7 +75,49 @@ let tests =
                     "Expected the JSON to be parsed in to a 1 day absence" 
                     expected
             }
-
+            
+            test "Parses 2 day absence" {
+                let absences = absencesParser """
+                {
+                    "outs": [
+                    {
+                    "employeeDisplayName": "Mike Wazowski",
+                    "employeeId": "2329907799103897834",
+                    "endDate": "2022-11-16",
+                    "endDatePortion": "all_day",
+                    "policyType": "type1",
+                    "policyTypeDisplayName": "Holiday",
+                    "requestId": 9056549,
+                    "requestRangeType": "days",
+                    "startDate": "2022-11-15",
+                    "startDatePortion": "all_day",
+                    "status": "approved"
+                    }
+                    ]
+                }
+                """
+                let details = { Employees = [] }
+                let expected = [
+                    {
+                        Employee = {
+                            DisplayName = EmployeeDisplayName "Mike Wazowski"
+                            Department = Department.Other
+                            Squad = None
+                            Id = "1" |> EmployeeId }
+                        Details = {
+                            Policy = AbsencePolicy.Holiday
+                            Duration = Days 2m
+                        }
+                    }
+                ]
+                
+                getAbsences testContext absences details
+                |> Expect.wantOk "" 
+                |> Expect.equal 
+                    "Expected the JSON to be parsed in to a 2 day absence" 
+                    expected
+            }
+            
             test "Parses afternoon absence" {
                 let absences = absencesParser """
                     {
@@ -88,9 +130,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "afternoon",
+                                "startDatePortion": "afternoon",
                                 "endDate": "2020-01-01",
-                                "endPortion": "afternoon",
+                                "endDatePortion": "afternoon",
                                 "type": "days"
                             }
                         ]
@@ -123,9 +165,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "morning",
+                                "startDatePortion": "morning",
                                 "endDate": "2020-01-01",
-                                "endPortion": "morning",
+                                "endDatePortion": "morning",
                                 "type": "days"
                             }
                         ]
@@ -158,9 +200,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "all_day",
+                                "startDatePortion": "all_day",
                                 "endDate": "2020-01-10",
-                                "endPortion": "all_day",
+                                "endDatePortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -193,9 +235,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "afternoon",
+                                "startDatePortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endPortion": "all_day",
+                                "endDatePortion": "all_day",
                                 "type": "days"
                             },
                             {
@@ -206,9 +248,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Daffy Duck",
                                 "startDate": "2020-01-01",
-                                "startPortion": "afternoon",
+                                "startDatePortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endPortion": "morning",
+                                "endDatePortion": "morning",
                                 "type": "days"
                             }
                         ]
@@ -247,9 +289,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "afternoon",
+                                "startDatePortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endPortion": "all_day",
+                                "endDatePortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -282,9 +324,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "all_day",
+                                "startDatePortion": "all_day",
                                 "endDate": "2020-01-10",
-                                "endPortion": "all_day",
+                                "endDatePortion": "all_day",
                                 "type": "days"
                             },
                             {
@@ -295,9 +337,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Daffy Duck",
                                 "startDate": "2020-01-01",
-                                "startPortion": "afternoon",
+                                "startDatePortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endPortion": "all_day",
+                                "endDatePortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -336,9 +378,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "good morning",
+                                "startDatePortion": "good morning",
                                 "endDate": "2020-01-01",
-                                "endPortion": "good evening",
+                                "endDatePortion": "good evening",
                                 "type": "days"
                             }
                         ]
@@ -371,9 +413,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startPortion": "good morning",
+                                "startDatePortion": "good morning",
                                 "endDate": "2020-01-10",
-                                "endPortion": "good evening",
+                                "endDatePortion": "good evening",
                                 "type": "days"
                             }
                         ]
@@ -416,9 +458,9 @@ let tests =
                           PolicyTypeDisplayName = "Holiday"
                           EmployeeDisplayName = "Bugs Bunny"
                           StartDate = "2020-01-01"
-                          StartPortion = "good morning"
+                          StartDatePortion = "good morning"
                           EndDate = "2020-01-10"
-                          EndPortion = "good evening" } ] }
+                          EndDatePortion = "good evening" } ] }
 
 
                 let expected = [
@@ -449,9 +491,9 @@ let tests =
                           PolicyTypeDisplayName = "Holiday"
                           EmployeeDisplayName = "Bugs Bunny"
                           StartDate = "2020-01-01"
-                          StartPortion = "good morning"
+                          StartDatePortion = "good morning"
                           EndDate = "2020-01-10"
-                          EndPortion = "good evening" } ] }
+                          EndDatePortion = "good evening" } ] }
 
 
                 let expected = [
