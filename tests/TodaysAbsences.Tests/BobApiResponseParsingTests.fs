@@ -76,48 +76,6 @@ let tests =
                     expected
             }
             
-            test "Parses 2 day absence" {
-                let absences = absencesParser """
-                {
-                    "outs": [
-                    {
-                    "employeeDisplayName": "Mike Wazowski",
-                    "employeeId": "2329907799103897834",
-                    "endDate": "2022-11-16",
-                    "endDatePortion": "all_day",
-                    "policyType": "type1",
-                    "policyTypeDisplayName": "Holiday",
-                    "requestId": 9056549,
-                    "requestRangeType": "days",
-                    "startDate": "2022-11-15",
-                    "startDatePortion": "all_day",
-                    "status": "approved"
-                    }
-                    ]
-                }
-                """
-                let details = { Employees = [] }
-                let expected = [
-                    {
-                        Employee = {
-                            DisplayName = EmployeeDisplayName "Mike Wazowski"
-                            Department = Department.Other
-                            Squad = None
-                            Id = "1" |> EmployeeId }
-                        Details = {
-                            Policy = AbsencePolicy.Holiday
-                            Duration = Days 2m
-                        }
-                    }
-                ]
-                
-                getAbsences testContext absences details
-                |> Expect.wantOk "" 
-                |> Expect.equal 
-                    "Expected the JSON to be parsed in to a 2 day absence" 
-                    expected
-            }
-            
             test "Parses afternoon absence" {
                 let absences = absencesParser """
                     {
