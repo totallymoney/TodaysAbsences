@@ -8,9 +8,9 @@ type AbsenceDto =
       PolicyTypeDisplayName: string
       EmployeeDisplayName: string
       StartDate: string
-      StartDatePortion: string
+      StartPortion: string
       EndDate: string
-      EndDatePortion: string }
+      EndPortion: string }
 type AbsencesResponseDto = 
     { Outs: AbsenceDto list }
 let deserialiseToAbsencesDto json = 
