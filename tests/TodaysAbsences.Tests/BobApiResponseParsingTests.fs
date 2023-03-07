@@ -51,9 +51,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "all_day",
+                                "startPortion": "all_day",
                                 "endDate": "2020-01-01",
-                                "endDatePortion": "all_day",
+                                "endPortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -88,9 +88,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "afternoon",
+                                "startPortion": "afternoon",
                                 "endDate": "2020-01-01",
-                                "endDatePortion": "afternoon",
+                                "endPortion": "afternoon",
                                 "type": "days"
                             }
                         ]
@@ -123,9 +123,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "morning",
+                                "startPortion": "morning",
                                 "endDate": "2020-01-01",
-                                "endDatePortion": "morning",
+                                "endPortion": "morning",
                                 "type": "days"
                             }
                         ]
@@ -158,9 +158,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "all_day",
+                                "startPortion": "all_day",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "all_day",
+                                "endPortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -193,9 +193,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "afternoon",
+                                "startPortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "all_day",
+                                "endPortion": "all_day",
                                 "type": "days"
                             },
                             {
@@ -206,9 +206,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Daffy Duck",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "afternoon",
+                                "startPortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "morning",
+                                "endPortion": "morning",
                                 "type": "days"
                             }
                         ]
@@ -247,9 +247,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "afternoon",
+                                "startPortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "all_day",
+                                "endPortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -282,9 +282,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "all_day",
+                                "startPortion": "all_day",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "all_day",
+                                "endPortion": "all_day",
                                 "type": "days"
                             },
                             {
@@ -295,9 +295,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Daffy Duck",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "afternoon",
+                                "startPortion": "afternoon",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "all_day",
+                                "endPortion": "all_day",
                                 "type": "days"
                             }
                         ]
@@ -336,9 +336,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "good morning",
+                                "startPortion": "good morning",
                                 "endDate": "2020-01-01",
-                                "endDatePortion": "good evening",
+                                "endPortion": "good evening",
                                 "type": "days"
                             }
                         ]
@@ -371,9 +371,9 @@ let tests =
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
                                 "startDate": "2020-01-01",
-                                "startDatePortion": "good morning",
+                                "startPortion": "good morning",
                                 "endDate": "2020-01-10",
-                                "endDatePortion": "good evening",
+                                "endPortion": "good evening",
                                 "type": "days"
                             }
                         ]
@@ -416,9 +416,9 @@ let tests =
                           PolicyTypeDisplayName = "Holiday"
                           EmployeeDisplayName = "Bugs Bunny"
                           StartDate = "2020-01-01"
-                          StartDatePortion = "good morning"
+                          StartPortion = "good morning"
                           EndDate = "2020-01-10"
-                          EndDatePortion = "good evening" } ] }
+                          EndPortion = "good evening" } ] }
 
 
                 let expected = [
@@ -449,9 +449,9 @@ let tests =
                           PolicyTypeDisplayName = "Holiday"
                           EmployeeDisplayName = "Bugs Bunny"
                           StartDate = "2020-01-01"
-                          StartDatePortion = "good morning"
+                          StartPortion = "good morning"
                           EndDate = "2020-01-10"
-                          EndDatePortion = "good evening" } ] }
+                          EndPortion = "good evening" } ] }
 
 
                 let expected = [
