@@ -34,7 +34,7 @@ let getAbsenceList (client : BobApiHttpClient) apiUrl (today:DateTime) = async {
 
 let getEmployeeDetails (client : BobApiHttpClient) apiUrl _ = async {
     let! response = 
-        sprintf "%s/people?humanReadable=true" apiUrl 
+        sprintf "%s/people" apiUrl 
         |> client.GetAsync
         |> Async.AwaitTask
 

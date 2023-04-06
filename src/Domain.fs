@@ -53,7 +53,7 @@ type Department =
         | "Legal" -> LegalAndCompliance
         | "Legal & Compliance" -> LegalAndCompliance
         | "Operations" -> Operations
-        | "Strategic Operations" -> StrategicOperations
+        | "250645321" -> StrategicOperations
         | x -> printf "Other department: %s" x
                Other
 
