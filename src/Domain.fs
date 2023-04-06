@@ -24,6 +24,7 @@ type Department =
     | People
     | LegalAndCompliance
     | Operations
+    | StrategicOperations
     | Other
 
     static member unwrap = 
@@ -37,6 +38,7 @@ type Department =
         | People -> "People"
         | LegalAndCompliance -> "Legal & Compliance"
         | Operations -> "Operations"
+        | StrategicOperations -> "Strategic Operations"
         | Other -> "Other"
     
     static member create = 
@@ -51,6 +53,7 @@ type Department =
         | "Legal" -> LegalAndCompliance
         | "Legal & Compliance" -> LegalAndCompliance
         | "Operations" -> Operations
+        | "Strategic Operations" -> StrategicOperations
         | x -> printf "Other department: %s" x
                Other
 
@@ -61,7 +64,7 @@ type EmployeeWorkDetails =
 
     static member create = function
         | Some details -> 
-            {  Department = details.Work.Department |> Department.create
+            {  Department = details.HumanReadable.Work.Department |> Department.create
                Squad = details.Work.Custom.Squad_5Gqot |> Option.map Squad }
         | None -> 
             { Department = Other
