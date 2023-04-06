@@ -53,7 +53,7 @@ type Department =
         | "Legal" -> LegalAndCompliance
         | "Legal & Compliance" -> LegalAndCompliance
         | "Operations" -> Operations
-        | "250645321" -> StrategicOperations
+        | "StrategicOperations" -> StrategicOperations
         | x -> printf "Other department: %s" x
                Other
 
@@ -64,7 +64,7 @@ type EmployeeWorkDetails =
 
     static member create = function
         | Some details -> 
-            {  Department = details.Work.Department |> Department.create
+            {  Department = details.HumanReadable.Department |> Department.create
                Squad = details.Work.Custom.Squad_5Gqot |> Option.map Squad }
         | None -> 
             { Department = Other
