@@ -83,7 +83,7 @@ let tests =
                             {
                                 "employeeId": "1",
                                 "policyType": "type1",
-                                "policyTypeDisplayName": "Holiday",
+                                "policyTypeDisplayName": "Compassionate Leave",
                                 "requestId": 1,
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
@@ -101,7 +101,7 @@ let tests =
                                    Department = Department.Other; 
                                    Squad = None;
                                    Id = "1" |> EmployeeId }
-                      Details = { Policy = AbsencePolicy.Holiday; 
+                      Details = { Policy = AbsencePolicy.CompassionateLeave; 
                                   Duration = PartOfDay Afternoon } } ]
 
                 getAbsences testContext absences details
