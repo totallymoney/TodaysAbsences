@@ -69,12 +69,12 @@ let tests =
                                    Department = Department.Tech; 
                                    Squad = None;
                                    Id = "" |> EmployeeId }
-                      Details = { Policy = AbsencePolicy.Holiday; 
+                      Details = { Policy = AbsencePolicy.CompassionateLeave; 
                                   Duration = Days 4m }
                     }
                 ]
                 let expected = [
-                    Block.section "*Tech*\nJoe Bloggs - Holiday - 4 days"
+                    Block.section "*Tech*\nJoe Bloggs - Leave - 4 days"
                 ]
 
                 Expect.sequenceEqual "" (absenceBlocks absences) expected
