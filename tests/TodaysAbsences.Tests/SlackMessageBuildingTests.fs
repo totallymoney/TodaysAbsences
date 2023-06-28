@@ -21,7 +21,16 @@ let private emptyEmployeeDetails =
           Department = "" }
       Personal =
         { ShortBirthDate = "" }
-      Id = "" }
+      Id = ""
+      HumanReadable = {
+          Work = {
+            Custom = 
+                { Squad_5Gqot = None }
+            Department = "" }       
+      }
+    }
+    
+    
 
 [<Tests>]
 let tests =
