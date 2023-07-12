@@ -25,6 +25,7 @@ type Department =
     | LegalAndCompliance
     | Operations
     | StrategicOperations
+    | ProductDesign
     | Other
 
     static member unwrap = 
@@ -39,6 +40,7 @@ type Department =
         | LegalAndCompliance -> "Legal & Compliance"
         | Operations -> "Operations"
         | StrategicOperations -> "Strategic Operations"
+        | ProductDesign -> "Product Design"
         | Other -> "Other"
     
     static member create = 
@@ -54,6 +56,7 @@ type Department =
         | "Legal & Compliance" -> LegalAndCompliance
         | "Operations" -> Operations
         | "Strategic Operations" -> StrategicOperations
+        | "Product Design" -> ProductDesign
         | x -> printf "Other department: %s" x
                Other
 
