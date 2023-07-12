@@ -40,7 +40,7 @@ type Department =
         | LegalAndCompliance -> "Legal & Compliance"
         | Operations -> "Operations"
         | StrategicOperations -> "Strategic Operations"
-        | Product -> "Product Design"
+        | ProductDesign -> "Product Design"
         | Other -> "Other"
     
     static member create = 
