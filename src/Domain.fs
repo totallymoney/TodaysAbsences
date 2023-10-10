@@ -68,7 +68,7 @@ type EmployeeWorkDetails =
     static member create = function
         | Some details -> 
             {  Department = details.HumanReadable.Work.Department |> Department.create
-               Squad = details.Work.Custom.Squad_5Gqot |> Option.map Squad }
+               Squad = details.HumanReadable.Work.Custom.Squad_5Gqot |> Option.map Squad }
         | None -> 
             { Department = Other
               Squad = None }
