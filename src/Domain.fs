@@ -171,6 +171,28 @@ type Absence =
 type Birthday =
     { Employee : EmployeeDetailsDto
       Day : string option }
+    
+type ImmutableDayMonthDate =
+    {
+        Day: int
+        Month: int
+    }
+    static member FromDateTime(dt: DateTime) =
+        {
+            Day = dt.Day
+            Month = dt.Month
+        }
+type SpecialDate = {
+    Name : string
+    Date : ImmutableDayMonthDate
+}
+
+let SpecialDates = [
+    {
+        Name = "Christmas",
+        
+    }
+]
 
 let getDuration logger (today : DateTime) absence = 
     let startPortion = toPartOfDay absence.StartPortion
