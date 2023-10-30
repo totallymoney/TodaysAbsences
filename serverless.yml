@@ -26,8 +26,8 @@ custom:
   events:
     stage: []
     prod:
-      # BST TIME
-      - schedule: cron(0 8 ? * MON-FRI *)
+      # GMT TIME
+      - schedule: cron(0 9 ? * MON-FRI *)
 
 package:
   artifact: package.zip
