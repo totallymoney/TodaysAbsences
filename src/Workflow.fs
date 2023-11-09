@@ -38,7 +38,7 @@ let getBirthdayDate (context : Context) (emp : EmployeeDetailsDto) =
     match DateTime.TryParseExact(birthdayString, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None) with
     | true, dt -> dt
     | false, _ ->
-        DateTime.ParseExact(birthdayString, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None)
+        DateTime.ParseExact(birthdayString, "dd-MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None)
     
 
 let getBirthdays (context : Context) (details : EmployeeDetailsResponseDto) = 
