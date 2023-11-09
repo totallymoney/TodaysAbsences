@@ -67,7 +67,6 @@ type EmployeeWorkDetails =
 
     static member create = function
         | Some details ->
-            Console.WriteLine(details.FullName+"  "+details.Work.Department);
             {  Department = details.Work.Department |> Department.create
                Squad = details.Work.Custom |> Option.bind (fun x -> x.Squad_5Gqot) |> Option.map Squad }
         | None -> 
