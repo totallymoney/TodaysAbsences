@@ -40,8 +40,7 @@ let getEmployeeDetails (client : BobApiHttpClient) apiUrl _ = async {
 
     let! content = 
         response.Content.ReadAsStringAsync()
-        |> Async.AwaitTask
-    Console.WriteLine(content);    
+        |> Async.AwaitTask  
 
     return deserialiseToEmployeeDetailsDto content
 }
