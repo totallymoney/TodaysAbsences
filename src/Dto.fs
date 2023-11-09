@@ -21,15 +21,12 @@ let deserialiseToAbsencesDto json =
 type SquadDto = 
     { Squad_5Gqot : string option }
 type EmployeeWorkDetailsDto = 
-    {   Custom: SquadDto
+    {   Custom: SquadDto option
         Department : string }
-type HumanReadableDto =
-    { Work: EmployeeWorkDetailsDto }
 type EmployeePersonalDetailsDto =
     { ShortBirthDate : string }
 type EmployeeDetailsDto = 
-    { HumanReadable: HumanReadableDto
-      Work : EmployeeWorkDetailsDto
+    { Work : EmployeeWorkDetailsDto
       Personal : EmployeePersonalDetailsDto
       Id : string
       FullName : string }

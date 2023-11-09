@@ -1,5 +1,6 @@
 module Workflow
 
+open System.Globalization
 open AppContext
 open Dto
 open System
@@ -31,14 +32,20 @@ let getAbsences (context : Context) absences details =
 
         return detailedAbsences
     }
+    
+let getBirthdayDate (context : Context) (emp : EmployeeDetailsDto) =
+    let birthdayString = $"{emp.Personal.ShortBirthDate}/{context.Today.Year}"
+    match DateTime.TryParseExact(birthdayString, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None) with
+    | true, dt -> dt
+    | false, _ ->
+        DateTime.ParseExact(birthdayString, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None)
+    
 
 let getBirthdays (context : Context) (details : EmployeeDetailsResponseDto) = 
         details.Employees
         |> List.filter (fun emp -> List.contains emp.Id context.Config.BirthdayOptIns)
         |> List.choose (fun emp -> 
-            let birthday = (string context.Today.Year)
-                           |> sprintf "%s-%s" emp.Personal.ShortBirthDate 
-                           |> DateTime.Parse
+            let birthday = getBirthdayDate context emp
             match context.Today.DayOfWeek, (birthday - context.Today).Days with
             | DayOfWeek.Friday, n when n = 1 || n = 2 -> 
                 Some { Employee = emp

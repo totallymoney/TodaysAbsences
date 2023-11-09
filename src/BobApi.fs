@@ -34,13 +34,14 @@ let getAbsenceList (client : BobApiHttpClient) apiUrl (today:DateTime) = async {
 
 let getEmployeeDetails (client : BobApiHttpClient) apiUrl _ = async {
     let! response = 
-        sprintf "%s/people?includeHumanReadable=true" apiUrl 
+        sprintf "%s/people?humanReadable=true" apiUrl 
         |> client.GetAsync
         |> Async.AwaitTask
 
     let! content = 
         response.Content.ReadAsStringAsync()
         |> Async.AwaitTask
+    Console.WriteLine(content);    
 
     return deserialiseToEmployeeDetailsDto content
 }
