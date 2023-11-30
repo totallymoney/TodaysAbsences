@@ -17,20 +17,12 @@ let private emptyEmployeeDetails =
     { FullName = ""
       Work = 
         { Custom = 
-            { Squad_5Gqot = None }
+            Some { Squad_5Gqot = None }
           Department = "" }
       Personal =
         { ShortBirthDate = "" }
       Id = ""
-      HumanReadable = {
-          Work = {
-            Custom = 
-                { Squad_5Gqot = None }
-            Department = "" }       
-      }
     }
-    
-    
 
 [<Tests>]
 let tests =

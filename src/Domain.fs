@@ -116,7 +116,7 @@ type AbsencePolicy =
         function
         | "Holiday" -> Holiday
         | "WFH" -> WorkingFromHome
-        | "Sick" -> Sick
+        | "Sick Leave" -> Sick
         | "Appointment" -> Appointment
         | "Compassionate Leave" -> CompassionateLeave
         | "Unpaid Leave" -> UnpaidLeave
