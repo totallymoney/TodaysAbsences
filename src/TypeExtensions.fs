@@ -2,10 +2,16 @@
 module TypeExtensions
 
 open System
+open System.Text.RegularExpressions
 
 let tee f x =
     f x
     x
+    
+let (|Regex|_|) pattern options input =
+   let m = Regex.Match(input, pattern, options)
+   if m.Success then Some(List.tail [ for g in m.Groups -> g.Value ])
+   else None
 
 module Result =
     let retn x = Ok x

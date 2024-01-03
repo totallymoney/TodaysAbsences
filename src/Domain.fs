@@ -1,6 +1,7 @@
 module Domain
 
 open System
+open System.Text.RegularExpressions
 open BobApi
 open Dto
 open Helpers
@@ -116,7 +117,6 @@ type AbsencePolicy =
         function
         | "Holiday" -> Holiday
         | "WFH" -> WorkingFromHome
-        | "Sick Leave" -> Sick
         | "Appointment" -> Appointment
         | "Compassionate Leave" -> CompassionateLeave
         | "Unpaid Leave" -> UnpaidLeave
@@ -127,6 +127,7 @@ type AbsencePolicy =
         | "Maternity Leave" -> MaternityLeave
         | "Working Abroad" -> WorkingAbroad
         | "Study Leave" -> StudyLeave
+        | Regex @"sick" RegexOptions.IgnoreCase [] -> Sick
         | _ -> Other
 
 type PartOfDay = Morning | Afternoon | AllDay
