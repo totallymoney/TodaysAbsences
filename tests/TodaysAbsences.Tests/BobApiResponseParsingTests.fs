@@ -46,7 +46,7 @@ let tests =
                             {
                                 "employeeId": "1",
                                 "policyType": "type1",
-                                "policyTypeDisplayName": "Holiday",
+                                "policyTypeDisplayName": "Sick Leave",
                                 "requestId": 1,
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
@@ -64,7 +64,7 @@ let tests =
                                    Department = Department.Other; 
                                    Squad = None;
                                    Id = "1" |> EmployeeId }
-                      Details = { Policy = AbsencePolicy.Holiday; 
+                      Details = { Policy = AbsencePolicy.Sick; 
                                   Duration = Days 1m } } ]
 
                 
@@ -242,7 +242,7 @@ let tests =
                             {
                                 "employeeId": "1",
                                 "policyType": "type1",
-                                "policyTypeDisplayName": "Holiday",
+                                "policyTypeDisplayName": "Sick",
                                 "requestId": 1,
                                 "status": "approved",
                                 "employeeDisplayName": "Bugs Bunny",
@@ -260,7 +260,7 @@ let tests =
                                    Department = Department.Other; 
                                    Squad = None;
                                    Id = "1" |> EmployeeId }
-                      Details = { Policy = AbsencePolicy.Holiday; 
+                      Details = { Policy = AbsencePolicy.Sick; 
                                   Duration = PartOfDay Afternoon } } ]
                 
                 getAbsences testContext absences details
