@@ -75,7 +75,7 @@ let tests =
                     }
                 ]
                 let expected = [
-                    Block.section "*Tech*\nJoe Bloggs - Leave - 4 days"
+                    Block.section "*Tech*\nJoe Bloggs - Compassionate Leave - 4 days"
                 ]
 
                 Expect.sequenceEqual "" (absenceBlocks absences) expected
