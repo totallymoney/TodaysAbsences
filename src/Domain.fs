@@ -102,7 +102,7 @@ type AbsencePolicy =
         | WorkingFromHome -> "WFH"
         | Sick -> "Sick Leave"
         | Appointment -> "Appointment"
-        | CompassionateLeave -> "Leave"
+        | CompassionateLeave -> "Compassionate Leave"
         | UnpaidLeave -> "Unpaid Leave"
         | Conference -> "Conference"
         | Training -> "Training"
