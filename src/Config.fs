@@ -13,13 +13,15 @@ let fetchEnvVar name =
 
 type Config =
     { BobApiUrl : string
-      BobApiKey : string
+      BobApiUsername : string
+      BobApiPassword : string
       SlackWebhookUrl : string
       BirthdayOptIns : string list }
 
 let getConfig =
     { BobApiUrl = fetchEnvVar "BOB_API_URL"
-      BobApiKey = fetchEnvVar "BOB_API_KEY"
+      BobApiUsername = fetchEnvVar "BOB_API_USERNAME"
+      BobApiPassword = fetchEnvVar "BOB_API_PASSWORD"
       SlackWebhookUrl = fetchEnvVar "SLACK_WEBHOOK_URL"
       BirthdayOptIns = (fetchEnvVar "BIRTHDAY_OPT_INS").Split('\n') 
                        |> List.ofArray 

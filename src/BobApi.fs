@@ -1,5 +1,6 @@
 module BobApi
 
+open System.Net.Http.Headers
 open Errors
 open Config
 open Helpers
@@ -11,9 +12,10 @@ open System.Net.Http
 open Infrastructure
 
 type BobApiHttpClient = HttpClient
-let getClient (apiKey : string) = 
+let getClient apiUsername apiPassword = 
     let c = new BobApiHttpClient()
-    c.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey) |> ignore
+    let credentials = System.Text.Encoding.UTF8.GetBytes $"%s{apiUsername}:%s{apiPassword}"
+    c.DefaultRequestHeaders.Authorization <- new AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials))
     c
 
 let getAbsenceList (client : BobApiHttpClient) apiUrl (today:DateTime) = async {
