@@ -10,7 +10,7 @@ type Context =
       Today : DateTime
       BobApiClient : BobApiClient }
 let getContext log today (config : Config) =
-    let bobApiClient = BobApi.getClient config.BobApiKey
+    let bobApiClient = BobApi.getClient config.BobApiUsername config.BobApiPassword
 
     { Config = config
       Log = log
