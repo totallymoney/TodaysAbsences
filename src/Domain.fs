@@ -18,7 +18,8 @@ type EmployeeDisplayName =
 type Department = 
     | Commercial
     | Corporate
-    | Marketing
+    | DataAndPerfMarketing
+    | BrandMarketing
     | Product
     | Tech
     | Finance
@@ -33,7 +34,8 @@ type Department =
         function
         | Commercial -> "Commercial"
         | Corporate -> "Corporate"
-        | Marketing -> "Marketing"
+        | DataAndPerfMarketing -> "Data & Performance Marketing"
+        | BrandMarketing -> "Brand Marketing"
         | Product -> "Product"
         | Tech -> "Tech"
         | Finance -> "Finance"
@@ -48,7 +50,8 @@ type Department =
         function
         | "Commercial" -> Commercial
         | "Corporate" -> Corporate
-        | "Marketing" -> Marketing
+        | "Data & Performance Marketing" -> DataAndPerfMarketing
+        | "Brand Marketing" -> BrandMarketing
         | "Product" -> Product
         | "Tech" -> Tech
         | "Finance" -> Finance
